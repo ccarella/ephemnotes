@@ -97,7 +97,7 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={100}
         />
         {errors.title && (
-          <p id="title-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
+          <p id="title-error" className="mt-1 text-sm text-red-600">
             {errors.title}
           </p>
         )}
@@ -133,7 +133,7 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={1000}
         />
         {errors.body && (
-          <p id="body-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
+          <p id="body-error" className="mt-1 text-sm text-red-600">
             {errors.body}
           </p>
         )}
