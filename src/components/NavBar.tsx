@@ -22,7 +22,7 @@ export function NavBar() {
     <>
       <nav
         role="navigation"
-        className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-700 dark:bg-gray-900/80"
+        className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-lg transition-all duration-200"
       >
         <div className={`${SPACING.container.maxWidth} ${SPACING.container.padding}`}>
           <div
@@ -33,7 +33,7 @@ export function NavBar() {
             <div className="flex items-center">
               <Link
                 href="/"
-                className={`${NAVIGATION.logo} text-gray-900 dark:text-white`}
+                className={`${NAVIGATION.logo} text-foreground hover:opacity-80 transition-opacity`}
               >
                 EphemNotes
               </Link>
@@ -50,7 +50,7 @@ export function NavBar() {
               ) : (
                 <button
                   onClick={handleSignIn}
-                  className={`${TOUCH_TARGETS.button} rounded-md bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600`}
+                  className={`${TOUCH_TARGETS.button} rounded-lg bg-primary text-sm font-medium text-white hover:bg-primary-hover shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
                 >
                   Sign In
                 </button>
@@ -60,7 +60,7 @@ export function NavBar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`${NAVIGATION.mobileMenu.button} rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-gray-300 dark:hover:bg-gray-800`}
+              className={`${NAVIGATION.mobileMenu.button} rounded-lg text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -91,20 +91,20 @@ export function NavBar() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className={`${NAVIGATION.mobileMenu.menu} bg-white dark:bg-gray-900`}>
+            <div className={`${NAVIGATION.mobileMenu.menu} bg-background border-t border-border animate-fade-in`}>
               <div className={`${SPACING.component.padding} ${SPACING.component.gap} flex flex-col`}>
                 {loading ? (
                   <div className="flex justify-center py-4">
                     <SkeletonAvatar size="sm" />
                   </div>
                 ) : user ? (
-                  <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+                  <div className="border-t border-border pt-4">
                     <UserMenu />
                   </div>
                 ) : (
                   <button
                     onClick={handleSignIn}
-                    className={`${TOUCH_TARGETS.button} w-full rounded-md bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600`}
+                    className={`${TOUCH_TARGETS.button} w-full rounded-lg bg-primary text-sm font-medium text-white hover:bg-primary-hover shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
                   >
                     Sign In
                   </button>

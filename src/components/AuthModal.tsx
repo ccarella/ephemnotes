@@ -96,7 +96,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <div
-      className={`${MODAL.overlay} flex items-center justify-center p-4 sm:p-6`}
+      className={`${MODAL.overlay} flex items-center justify-center p-4 sm:p-6 animate-fade-in`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -105,22 +105,22 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className={`${MODAL.content.fullMobile} rounded-none sm:rounded-lg bg-white ${MODAL.padding} shadow-lg dark:bg-gray-800`}
+        className={`${MODAL.content.fullMobile} rounded-none sm:rounded-2xl bg-white ${MODAL.padding} shadow-2xl dark:bg-gray-900 transform transition-all duration-200 ease-out scale-100`}
       >
-        <div className="mb-6 flex items-center justify-between">
-          <h2 id="auth-modal-title" className={TYPOGRAPHY.heading.h3}>
-            {mode === 'signin' ? 'Sign In' : mode === 'signup' ? 'Sign Up' : 'Magic Link Sign In'}
+        <div className="mb-8 flex items-center justify-between">
+          <h2 id="auth-modal-title" className={`${TYPOGRAPHY.heading.h2} text-gray-900 dark:text-white`}>
+            {mode === 'signin' ? 'Welcome back' : mode === 'signup' ? 'Create account' : 'Magic link'}
           </h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className={`${TOUCH_TARGETS.iconButton} flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700`}
+            className={`${TOUCH_TARGETS.iconButton} flex items-center justify-center text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-150`}
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
@@ -128,46 +128,53 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </div>
 
         {magicLinkSent ? (
-          <div className="text-center space-y-4">
-            <div className="text-green-600 dark:text-green-400">
-              <svg
-                className="w-16 h-16 mx-auto mb-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+          <div className="text-center space-y-6 py-8 animate-fade-in">
+            <div className="text-green-500 dark:text-green-400">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
             </div>
-            <h3 className={`${TYPOGRAPHY.heading.h4} text-gray-900 dark:text-white`}>
-              Check your email!
-            </h3>
-            <p className={`${TYPOGRAPHY.body.base} text-gray-600 dark:text-gray-300`}>
-              We&apos;ve sent a magic link to <strong>{email}</strong>
-            </p>
-            <p className={`${TYPOGRAPHY.body.small} text-gray-500 dark:text-gray-400`}>
-              Click the link in the email to sign in. The link will expire in 1 hour.
+            <div className="space-y-2">
+              <h3 className={`${TYPOGRAPHY.heading.h3} text-gray-900 dark:text-white`}>
+                Check your inbox
+              </h3>
+              <p className={`${TYPOGRAPHY.body.base} text-gray-600 dark:text-gray-400`}>
+                We sent a magic link to
+              </p>
+              <p className={`${TYPOGRAPHY.body.base} font-medium text-gray-900 dark:text-white`}>
+                {email}
+              </p>
+            </div>
+            <p className={`${TYPOGRAPHY.body.small} text-gray-500 dark:text-gray-500 max-w-sm mx-auto`}>
+              Click the link in your email to sign in. The link expires in 1 hour.
             </p>
             <button
               onClick={() => {
                 setMagicLinkSent(false)
                 setEmail('')
               }}
-              className={`${TOUCH_TARGETS.button} px-6 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 ${TYPOGRAPHY.body.base}`}
+              className={`${TOUCH_TARGETS.button} px-6 py-2.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 ${TYPOGRAPHY.body.base} font-medium transition-colors duration-150`}
             >
-              Send another link
+              Try again
             </button>
           </div>
         ) : mode === 'signin' || mode === 'magic-link' ? (
           <form onSubmit={handleSubmit} className={SPACING.form.gap}>
             <div className={SPACING.form.inputGap}>
-              <label htmlFor="email" className={`block ${TYPOGRAPHY.label.base}`}>
-                Email
+              <label htmlFor="email" className={`block ${TYPOGRAPHY.label.base} text-gray-700 dark:text-gray-300`}>
+                Email address
               </label>
               <input
                 id="email"
@@ -175,14 +182,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
-                placeholder="Enter your email"
+                className={`w-full ${TOUCH_TARGETS.input} rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:focus:bg-gray-900 dark:text-white transition-all duration-150`}
+                placeholder="you@example.com"
               />
             </div>
 
             {mode === 'signin' && (
               <div className={SPACING.form.inputGap}>
-                <label htmlFor="password" className={`block ${TYPOGRAPHY.label.base}`}>
+                <label htmlFor="password" className={`block ${TYPOGRAPHY.label.base} text-gray-700 dark:text-gray-300`}>
                   Password
                 </label>
                 <input
@@ -191,15 +198,15 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
-                  placeholder="Enter your password"
+                  className={`w-full ${TOUCH_TARGETS.input} rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-800 dark:focus:bg-gray-900 dark:text-white transition-all duration-150`}
+                  placeholder="••••••••"
                 />
               </div>
             )}
 
             {validationError && (
               <div
-                className={`rounded-md bg-red-50 p-3 ${TYPOGRAPHY.body.small} text-red-600 dark:bg-red-900/20 dark:text-red-400`}
+                className={`rounded-lg bg-red-50 border border-red-200 p-3.5 ${TYPOGRAPHY.body.small} text-red-600 dark:bg-red-900/10 dark:border-red-900/20 dark:text-red-400 animate-fade-in`}
               >
                 {validationError}
               </div>
@@ -208,15 +215,15 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600 ${TYPOGRAPHY.body.base}`}
+              className={`w-full ${TOUCH_TARGETS.button} py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-500 dark:hover:bg-blue-600 ${TYPOGRAPHY.body.base} font-medium shadow-sm hover:shadow transition-all duration-150 transform hover:scale-[1.02]`}
             >
               {loading
                 ? mode === 'magic-link'
                   ? 'Sending...'
-                  : 'Loading...'
+                  : 'Signing in...'
                 : mode === 'magic-link'
-                  ? 'Send Magic Link'
-                  : 'Sign In'}
+                  ? 'Send magic link'
+                  : 'Sign in'}
             </button>
           </form>
         ) : (
@@ -225,13 +232,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
         {/* Farcaster Authentication */}
         {!magicLinkSent && mode === 'signin' && (
-          <div className="mt-6">
+          <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+                <div className="w-full border-t border-gray-200 dark:border-gray-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                <span className="bg-white px-3 text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                   Or continue with
                 </span>
               </div>
@@ -251,7 +258,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     }
                   }}
                   disabled={farcasterLoading}
-                  className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} flex items-center justify-center`}
+                  className={`w-full ${TOUCH_TARGETS.button} py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} font-medium flex items-center justify-center shadow-sm hover:shadow transition-all duration-150 transform hover:scale-[1.02]`}
                 >
                   {farcasterLoading ? (
                     'Authenticating...'
@@ -277,7 +284,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     }
                   }}
                   disabled={farcasterLoading}
-                  className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} flex items-center justify-center`}
+                  className={`w-full ${TOUCH_TARGETS.button} py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} font-medium flex items-center justify-center shadow-sm hover:shadow transition-all duration-150 transform hover:scale-[1.02]`}
                 >
                   {farcasterLoading ? (
                     'Authenticating...'
@@ -298,10 +305,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {!magicLinkSent && (
           <>
             {mode !== 'magic-link' && mode === 'signin' && (
-              <div className="mt-4 text-center">
+              <div className="mt-6 text-center">
                 <button
                   onClick={() => setMode('magic-link')}
-                  className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors duration-150"
                 >
                   Sign in with magic link
                 </button>
@@ -309,33 +316,33 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             )}
 
             {mode === 'magic-link' && (
-              <div className="mt-4 text-center">
+              <div className="mt-6 text-center">
                 <button
                   onClick={() => setMode('signin')}
-                  className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors duration-150"
                 >
                   Sign in with password
                 </button>
               </div>
             )}
 
-            <div className={`mt-6 text-center ${TYPOGRAPHY.body.base}`}>
+            <div className={`mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center ${TYPOGRAPHY.body.sm}`}>
               {mode === 'signin' || mode === 'magic-link' ? (
-                <p>
+                <p className="text-gray-600 dark:text-gray-400">
                   Don&apos;t have an account?{' '}
                   <button
                     onClick={() => setMode('signup')}
-                    className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors duration-150"
                   >
                     Sign up
                   </button>
                 </p>
               ) : (
-                <p>
+                <p className="text-gray-600 dark:text-gray-400">
                   Already have an account?{' '}
                   <button
                     onClick={() => setMode('signin')}
-                    className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors duration-150"
                   >
                     Sign in
                   </button>

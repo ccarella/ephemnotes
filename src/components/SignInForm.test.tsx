@@ -53,7 +53,7 @@ describe('SignInForm', () => {
 
       const emailInput = screen.getByLabelText(/email/i)
       expect(emailInput).toHaveAttribute('type', 'email')
-      expect(emailInput).toHaveAttribute('placeholder', 'Enter your email')
+      expect(emailInput).toHaveAttribute('placeholder', 'you@example.com')
       expect(emailInput).toHaveAttribute('autocomplete', 'email')
     })
 
@@ -260,7 +260,7 @@ describe('SignInForm', () => {
       expect(screen.getByText('Sending...')).toBeInTheDocument()
 
       await waitFor(() => {
-        expect(screen.getByText('Send Magic Link')).toBeInTheDocument()
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
       })
     })
 
@@ -281,8 +281,8 @@ describe('SignInForm', () => {
       expect(submitButton).toBeDisabled()
 
       await waitFor(() => {
-        expect(emailInput).not.toBeDisabled()
-        expect(submitButton).not.toBeDisabled()
+        // After success, the form is replaced with success UI
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
       })
     })
 
@@ -322,13 +322,12 @@ describe('SignInForm', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(mockToast.success).toHaveBeenCalledWith(
-          'Magic link sent to user@example.com'
-        )
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
+        expect(screen.getByText('user@example.com')).toBeInTheDocument()
       })
     })
 
-    it('should clear form after successful submission', async () => {
+    it('should show success UI after successful submission', async () => {
       const user = userEvent.setup()
       mockSignInWithMagicLink.mockResolvedValue(undefined)
       render(<SignInForm />)
@@ -340,15 +339,16 @@ describe('SignInForm', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(emailInput).toHaveValue('')
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
+        expect(screen.getByText('Click the link in your email to sign in. The link expires in 1 hour.')).toBeInTheDocument()
       })
     })
 
     it('should call onSuccess callback after successful submission', async () => {
       const user = userEvent.setup()
-      const mockOnSuccess = vi.fn()
+      const onSuccess = vi.fn()
       mockSignInWithMagicLink.mockResolvedValue(undefined)
-      render(<SignInForm onSuccess={mockOnSuccess} />)
+      render(<SignInForm onSuccess={onSuccess} />)
 
       const emailInput = screen.getByLabelText(/email/i)
       await user.type(emailInput, 'user@example.com')
@@ -357,7 +357,8 @@ describe('SignInForm', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(mockOnSuccess).toHaveBeenCalledTimes(1)
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
+        expect(onSuccess).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -521,9 +522,8 @@ describe('SignInForm', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(mockToast.success).toHaveBeenCalledWith(
-          'Magic link sent to user@example.com'
-        )
+        expect(screen.getByText('Check your inbox')).toBeInTheDocument()
+        expect(screen.getByText('user@example.com')).toBeInTheDocument()
       })
     })
   })
@@ -533,7 +533,7 @@ describe('SignInForm', () => {
       render(<SignInForm />)
 
       const form = document.querySelector('form')
-      expect(form).toHaveClass('space-y-4')
+      expect(form).toHaveClass('space-y-6')
 
       const emailInput = screen.getByLabelText(/email/i)
       expect(emailInput).toHaveClass('w-full')
@@ -546,7 +546,7 @@ describe('SignInForm', () => {
       render(<SignInForm />)
 
       const form = document.querySelector('form')
-      expect(form).toHaveClass('space-y-4')
+      expect(form).toHaveClass('space-y-6')
     })
   })
 
@@ -592,7 +592,8 @@ describe('SignInForm', () => {
       render(<SignInForm className="custom-class" />)
 
       const form = document.querySelector('form')
-      expect(form).toHaveClass('custom-class', 'space-y-4')
+      expect(form).toHaveClass('custom-class')
+      expect(form).toHaveClass('space-y-6')
     })
 
     it('should accept custom button text', () => {
