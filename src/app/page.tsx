@@ -22,21 +22,31 @@ async function PostsList() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--paper)' }}>
       <NavBar />
-      <div>
+      <div className="mx-auto" style={{ maxWidth: '720px', padding: '0 40px' }}>
         <header className="text-center" style={{ marginTop: '80px' }}>
           <h1 
-            className="text-display-1 font-serif text-text-primary"
-            style={{ fontWeight: 500 }}
+            className="font-serif"
+            style={{ 
+              fontSize: '72px',
+              fontWeight: 500,
+              color: 'var(--text-primary)',
+              lineHeight: 1.1
+            }}
           >
-            Latest Post
+            EphemNotes
           </h1>
           <p 
-            className="font-serif text-text-secondary"
-            style={{ fontSize: '24px', fontWeight: 400, marginTop: '8px' }}
+            className="font-serif"
+            style={{ 
+              fontSize: '24px', 
+              fontWeight: 400, 
+              marginTop: '8px',
+              color: 'var(--text-secondary)'
+            }}
           >
-            A thought worth sharing, briefly expressed
+            Share your ephemeral thoughts
           </p>
         </header>
 
@@ -47,16 +57,18 @@ export default function Home() {
           
           <Link 
             href="/new-post"
-            className="bg-brand-blue text-white text-caption font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2 inline-flex items-center justify-center"
+            className="text-white font-semibold hover:opacity-90 transition-opacity duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2 inline-flex items-center justify-center"
             style={{ 
+              backgroundColor: 'var(--brand-blue)',
               width: '240px',
               height: '48px',
-              borderRadius: '4px',
+              borderRadius: '24px',
               marginTop: '40px',
-              textDecoration: 'none'
+              textDecoration: 'none',
+              fontSize: '16px'
             }}
           >
-            CREATE POST
+            New Post
           </Link>
         </main>
       </div>

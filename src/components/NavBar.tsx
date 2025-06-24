@@ -51,10 +51,10 @@ export function NavBar() {
               ) : (
                 <button
                   onClick={handleSignIn}
-                  className="bg-brand-blue text-white text-sm font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+                  className="bg-white text-text-primary text-sm font-medium hover:bg-gray-50 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 border border-gray-200"
                   style={{ 
-                    padding: '8px 18px',
-                    borderRadius: '12px',
+                    padding: '10px 20px',
+                    borderRadius: '24px',
                     lineHeight: '18px'
                   }}
                 >

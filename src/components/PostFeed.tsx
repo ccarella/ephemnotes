@@ -90,12 +90,11 @@ export function PostFeed({ posts, isLoading = false, error = null, onRetry }: Po
     return <EmptyState />
   }
 
-  // Show only the latest post according to style guide
-  const latestPost = posts[0]
-  
   return (
-    <div className="animate-fade-in">
-      <PostItem key={latestPost.id} post={latestPost} href={`/posts/${latestPost.id}`} />
+    <div className="space-y-4 animate-fade-in">
+      {posts.map((post) => (
+        <PostItem key={post.id} post={post} href={`/posts/${post.id}`} />
+      ))}
     </div>
   )
 }
