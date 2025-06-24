@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import type { Post } from '@/lib/posts'
-import { TYPOGRAPHY, SPACING, TOUCH_TARGETS } from '@/lib/responsive'
 import { Skeleton } from '@/components/Skeleton'
 
 interface PostItemProps {
@@ -16,7 +15,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     return (
       <div 
         data-testid="post-item-skeleton"
-        className={`${SPACING.component.padding} border rounded-lg`}
+        className="p-5 border border-border rounded-xl bg-gray-50/50 dark:bg-gray-900/20 animate-fade-in"
       >
         <div className="space-y-3">
           {/* Header section with username and title */}
@@ -69,17 +68,17 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
   const content = (
     <div 
       data-testid="post-item"
-      className={`${SPACING.component.padding} border rounded-lg hover:bg-muted/50 transition-colors ${href ? TOUCH_TARGETS.link : ''}`}
+      className={`p-5 border border-border rounded-xl hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm bg-background transition-all duration-150 ${href ? 'cursor-pointer' : ''}`}
     >
       <div className="space-y-3">
         {/* Header section with username and title */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-          <span className={`${TYPOGRAPHY.body.small} text-muted-foreground whitespace-nowrap`}>
-            {username} wrote:
+        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+          <span className="text-sm text-muted whitespace-nowrap">
+            {username}
           </span>
           <h3 
             data-testid="post-title" 
-            className={`${TYPOGRAPHY.body.base} font-semibold line-clamp-1 sm:line-clamp-none sm:truncate`}
+            className="text-base font-medium text-foreground line-clamp-1 sm:line-clamp-none sm:truncate"
           >
             {title}
           </h3>
@@ -87,7 +86,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
         
         {/* Body preview */}
         {body && (
-          <p className={`${TYPOGRAPHY.body.base} text-muted-foreground line-clamp-2 sm:line-clamp-3`}>
+          <p className="text-sm text-muted leading-relaxed line-clamp-2 sm:line-clamp-3">
             {body}
           </p>
         )}
@@ -95,7 +94,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
         {/* Timestamp */}
         {createdAt && (
           <time 
-            className={`${TYPOGRAPHY.body.small} text-muted-foreground/70`}
+            className="text-xs text-muted/70"
             dateTime={createdAt.toISOString()}
           >
             {formatTimestamp(createdAt)}
@@ -109,7 +108,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     return (
       <Link 
         href={href} 
-        className={`block ${TOUCH_TARGETS.link} focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg`}
+        className="block focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 rounded-xl"
       >
         {content}
       </Link>

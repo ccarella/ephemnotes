@@ -95,7 +95,7 @@ describe('SignUpForm', () => {
 
       // Since we haven't entered a password, we should get a password error, not an email error
       expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument()
-      expect(screen.getByText('Password is required')).toBeInTheDocument()
+      expect(screen.getByText('Password must be at least 6 characters long')).toBeInTheDocument()
     })
   })
 
@@ -110,7 +110,7 @@ describe('SignUpForm', () => {
       const submitButton = screen.getByRole('button', { name: /sign up/i })
       await user.click(submitButton)
 
-      expect(screen.getByText('Password is required')).toBeInTheDocument()
+      expect(screen.getByText('Password must be at least 6 characters long')).toBeInTheDocument()
     })
 
     it('should show error for password too short', async () => {
@@ -264,7 +264,7 @@ describe('SignUpForm', () => {
       expect(screen.getByText('Creating account...')).toBeInTheDocument()
       
       await waitFor(() => {
-        expect(screen.getByText('Sign Up')).toBeInTheDocument()
+        expect(screen.getByText('Sign up')).toBeInTheDocument()
       })
     })
 

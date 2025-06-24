@@ -1,0 +1,46 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - link "EphemNotes":
+    - /url: /
+  - button "Sign In"
+- banner:
+  - heading "EphemNotes" [level=1]
+  - paragraph: Share your ephemeral thoughts
+- main:
+  - heading "Recent Posts" [level=2]
+  - paragraph: Connection Error
+  - paragraph: Check your internet connection and try again.
+- alert:
+  - img
+  - paragraph: Failed to load posts
+  - button "Dismiss notification":
+    - img
+- alert:
+  - img
+  - paragraph: Failed to load posts
+  - button "Dismiss notification":
+    - img
+- alert:
+  - img
+  - paragraph: Failed to load posts
+  - button "Dismiss notification":
+    - img
+- alert:
+  - img
+  - paragraph: Failed to load posts
+  - button "Dismiss notification":
+    - img
+- alert:
+  - img
+  - paragraph: Failed to load posts
+  - button "Dismiss notification":
+    - img
+- alert
+- button "Open Next.js Dev Tools":
+  - img
+- button "Open issues overlay": 1 Issue
+- button "Collapse issues badge":
+  - img
+```

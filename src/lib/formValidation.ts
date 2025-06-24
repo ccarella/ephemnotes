@@ -12,10 +12,11 @@ export const signupSchema = yup.object({
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters long')
     .max(72, 'Password must be less than 72 characters')
-    .matches(
-      /^[\S]+$/,
-      'Password cannot contain spaces'
-    ),
+    .test('no-spaces', 'Password cannot contain spaces', value => {
+      // Only validate spaces if value is not empty
+      if (!value) return true
+      return /^[\S]+$/.test(value)
+    }),
 })
 
 // Type for the signup form data
