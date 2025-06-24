@@ -25,25 +25,28 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
   const [isInFrame, setIsInFrame] = useState(false)
   const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   // Check if we're in a Farcaster frame on mount
   useEffect(() => {
-    const inFrame = isInFarcasterFrame()
-    setIsInFrame(inFrame)
-    
-    if (inFrame) {
-      // Get Farcaster context
-      const context = getFarcasterContext()
-      if (context?.user) {
-        setFarcasterUser({
-          fid: context.user.fid,
-          username: context.user.username,
-          displayName: context.user.displayName,
-          pfpUrl: context.user.pfpUrl
-        })
+    const checkFrame = async () => {
+      const inFrame = isInFarcasterFrame()
+      setIsInFrame(inFrame)
+      
+      if (inFrame) {
+        // Get Farcaster context
+        const context = await getFarcasterContext()
+        if (context?.user) {
+          setFarcasterUser({
+            fid: context.user.fid,
+            username: context.user.username,
+            displayName: context.user.displayName,
+            pfpUrl: context.user.pfpUrl
+          })
+        }
       }
     }
+    
+    checkFrame()
   }, [])
 
   const authenticateWithQuickAuth = useCallback(async () => {
@@ -52,7 +55,6 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
     }
 
     setLoading(true)
-    setError(null)
 
     try {
       // Get auth token from Farcaster
@@ -75,7 +77,6 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
       // Auth context will update automatically via onAuthStateChange
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Quick auth failed'
-      setError(message)
       throw new Error(message)
     } finally {
       setLoading(false)
@@ -84,7 +85,6 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
 
   const authenticateWithSIWF = useCallback(async (message: string, signature: string) => {
     setLoading(true)
-    setError(null)
 
     try {
       const response = await fetch('/api/auth/farcaster', {
@@ -102,7 +102,6 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
       // The API should handle creating the session
     } catch (err) {
       const message = err instanceof Error ? err.message : 'SIWF authentication failed'
-      setError(message)
       throw new Error(message)
     } finally {
       setLoading(false)
@@ -114,7 +113,7 @@ export function FarcasterAuthProvider({ children }: { children: React.ReactNode 
     isInFrame,
     farcasterUser,
     loading: auth.loading || loading,
-    error: auth.error || (error ? new Error(error) : null),
+    error: auth.error,
     authenticateWithQuickAuth,
     authenticateWithSIWF
   }

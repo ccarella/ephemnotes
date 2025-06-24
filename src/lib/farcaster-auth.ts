@@ -17,13 +17,18 @@ export function isInFarcasterFrame(): boolean {
  */
 export async function getQuickAuthToken(): Promise<{ token: string }> {
   try {
-    const result = await sdk.actions.requestAuthToken()
+    // Use the signIn action to get auth token
+    const result = await sdk.actions.signIn({
+      nonce: crypto.randomUUID()
+    })
     
-    if (!result?.token) {
-      throw new Error('No token received from Farcaster')
+    if (!result?.message) {
+      throw new Error('No auth message received from Farcaster')
     }
     
-    return { token: result.token }
+    // For now, return the message as token - in production this would be
+    // properly exchanged for a JWT token
+    return { token: result.message }
   } catch (error) {
     console.error('Failed to get Farcaster auth token:', error)
     throw new Error('Failed to get Farcaster auth token')
@@ -150,9 +155,10 @@ export function extractFidFromToken(token: string): number | null {
 /**
  * Get Farcaster user context from SDK
  */
-export function getFarcasterContext() {
+export async function getFarcasterContext() {
   try {
-    return sdk.context
+    const context = await sdk.context
+    return context
   } catch {
     return null
   }

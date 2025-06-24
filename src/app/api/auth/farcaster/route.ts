@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createServerSupabaseClient()
     
-    let fid: number
+    let fid: number | undefined
     let username: string | undefined
     let address: string | undefined
 
@@ -53,12 +53,17 @@ export async function POST(request: NextRequest) {
     if (body.type === 'quick' && 'token' in body) {
       const verification = await verifyFarcasterToken(body.token, jwtSecret)
       
-      if (!verification.valid) {
+      if (!verification.valid || !verification.payload) {
         return createErrorResponse('Invalid Farcaster token', 401)
       }
 
       fid = verification.payload.fid
       username = verification.payload.username
+      
+      // Ensure we have required fields
+      if (!fid) {
+        return createErrorResponse('Missing FID in token', 400)
+      }
     } 
     // Handle SIWF flow
     else if (body.type === 'siwf' && 'message' in body && 'signature' in body) {
@@ -79,16 +84,22 @@ export async function POST(request: NextRequest) {
         return createErrorResponse('Invalid signature', 401)
       }
 
-      // Extract FID from message or use a default
+      // Extract FID from message or generate a temporary one
       // In production, this would be parsed from the message
-      fid = extractFidFromToken(body.message) || Date.now()
+      const extractedFid = extractFidFromToken(body.message)
+      fid = extractedFid || Math.floor(Date.now() / 1000) // Use timestamp as fallback FID
     } else {
       return createErrorResponse('Invalid request format', 400)
     }
+    
+    // Ensure we have a valid FID at this point
+    if (!fid) {
+      return createErrorResponse('Unable to determine FID', 400)
+    }
 
-    // Check if user exists
-    const { data: existingUser, error: fetchError } = await supabase
-      .from('users')
+    // Check if user exists by FID
+    const { data: existingProfile, error: fetchError } = await supabase
+      .from('profiles')
       .select('*')
       .eq('fid', fid)
       .single()
@@ -128,8 +139,16 @@ export async function POST(request: NextRequest) {
       if (profileError) {
         console.error('Failed to create profile:', profileError)
       }
-    } else if (!fetchError && existingUser) {
-      user = existingUser
+    } else if (!fetchError && existingProfile) {
+      // Get the auth user by ID
+      const { data: authData, error: authError } = await supabase.auth.admin.getUserById(existingProfile.id)
+      
+      if (authError || !authData.user) {
+        console.error('Failed to get auth user:', authError)
+        return createErrorResponse('Authentication failed', 500)
+      }
+      
+      user = authData.user
     } else {
       console.error('Database error:', fetchError)
       return createErrorResponse('Authentication failed', 500)
@@ -140,8 +159,8 @@ export async function POST(request: NextRequest) {
     const jwt = await new jose.SignJWT({
       sub: user.id,
       fid,
-      username: username || user.username,
-      email: user.email
+      username: username || existingProfile?.username || `fid-${fid}`,
+      email: user.email || ''
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
@@ -157,13 +176,13 @@ export async function POST(request: NextRequest) {
           email: user.email,
           user_metadata: {
             fid,
-            username: username || user.username,
+            username: username || existingProfile?.username || `fid-${fid}`,
             address
           }
         }
       }),
       {
-        status: existingUser ? 200 : 201,
+        status: existingProfile ? 200 : 201,
         headers: { 'Content-Type': 'application/json' }
       }
     )
