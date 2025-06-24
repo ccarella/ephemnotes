@@ -30,13 +30,13 @@ export default function Home() {
             className="text-display-1 font-serif text-text-primary"
             style={{ fontWeight: 500 }}
           >
-            Latest Post
+            EphemNotes
           </h1>
           <p 
             className="font-serif text-text-secondary"
             style={{ fontSize: '24px', fontWeight: 400, marginTop: '8px' }}
           >
-            A thought worth sharing, briefly expressed
+            Share your ephemeral thoughts
           </p>
         </header>
 
@@ -56,7 +56,7 @@ export default function Home() {
               textDecoration: 'none'
             }}
           >
-            CREATE POST
+            New Post
           </Link>
         </main>
       </div>
