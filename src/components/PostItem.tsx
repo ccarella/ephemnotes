@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 import { TYPOGRAPHY, SPACING, TOUCH_TARGETS } from '@/lib/responsive'
+import { Skeleton } from '@/components/Skeleton'
 
 interface PostItemProps {
   post?: Post
@@ -15,16 +16,23 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     return (
       <div 
         data-testid="post-item-skeleton"
-        className={`${SPACING.component.padding} border rounded-lg animate-pulse`}
+        className={`${SPACING.component.padding} border rounded-lg`}
       >
         <div className="space-y-3">
+          {/* Header section with username and title */}
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-2">
-            <div className="h-4 w-24 bg-muted rounded" />
-            <div className="h-5 w-full sm:w-48 bg-muted rounded" />
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-5 w-full sm:w-48" />
           </div>
-          <div className="h-4 w-full bg-muted rounded" />
-          <div className="h-4 w-3/4 bg-muted rounded" />
-          <div className="h-3 w-32 bg-muted rounded mt-4" />
+          
+          {/* Body preview - 2 lines */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+          
+          {/* Timestamp */}
+          <Skeleton className="h-3 w-32 mt-4" />
         </div>
       </div>
     )

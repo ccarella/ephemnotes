@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { AuthModal } from './AuthModal'
 import { UserMenu } from './UserMenu'
+import { SkeletonAvatar } from './Skeleton'
 import { NAVIGATION, SPACING, TOUCH_TARGETS } from '@/lib/responsive'
 
 export function NavBar() {
@@ -41,7 +42,9 @@ export function NavBar() {
             {/* Desktop Navigation */}
             <div className={NAVIGATION.desktopMenu}>
               {loading ? (
-                <div data-testid="navbar-loading" className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                <div data-testid="navbar-loading">
+                  <SkeletonAvatar size="sm" />
+                </div>
               ) : user ? (
                 <UserMenu />
               ) : (
@@ -92,7 +95,7 @@ export function NavBar() {
               <div className={`${SPACING.component.padding} ${SPACING.component.gap} flex flex-col`}>
                 {loading ? (
                   <div className="flex justify-center py-4">
-                    <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                    <SkeletonAvatar size="sm" />
                   </div>
                 ) : user ? (
                   <div className="border-t border-gray-200 pt-4 dark:border-gray-700">

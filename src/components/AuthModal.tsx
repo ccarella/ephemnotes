@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/lib/toast'
 import { MODAL, TOUCH_TARGETS, SPACING, TYPOGRAPHY } from '@/lib/responsive'
 
 type AuthModalProps = {
@@ -14,7 +15,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
-  const { signIn, signUp, loading, error } = useAuth()
+  const { signIn, signUp, loading } = useAuth()
+  const { toast } = useToast()
 
   useEffect(() => {
     if (!isOpen) {
@@ -55,12 +57,16 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       if (mode === 'signin') {
         await signIn(email, password)
+        toast.success('Welcome back!')
       } else {
         await signUp(email, password)
+        toast.success('Account created successfully!')
       }
       onClose()
-    } catch {
-      // Error is already handled in the auth context
+    } catch (error) {
+      // Display error message from Supabase
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred during authentication'
+      toast.error(errorMessage)
     }
   }
 
@@ -111,12 +117,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </label>
             <input
               id="email"
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
               className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
-              required
+              placeholder="Enter your email"
             />
           </div>
 
@@ -131,13 +137,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
               className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
-              required
+              placeholder="Enter your password"
             />
           </div>
 
-          {(error || validationError) && (
+          {validationError && (
             <div className={`rounded-md bg-red-50 p-3 ${TYPOGRAPHY.body.small} text-red-600 dark:bg-red-900/20 dark:text-red-400`}>
-              {validationError || error?.message}
+              {validationError}
             </div>
           )}
 

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { TOUCH_TARGETS, SPACING, TYPOGRAPHY, LAYOUT } from '@/lib/responsive'
+import { useToast } from '@/lib/toast'
 
 interface PostFormProps {
   initialData?: {
@@ -16,11 +17,11 @@ interface PostFormProps {
 
 export default function PostForm({ initialData, onSubmit, isEditing = false }: PostFormProps) {
   const router = useRouter()
+  const { toast } = useToast()
   const [title, setTitle] = useState(initialData?.title || '')
   const [body, setBody] = useState(initialData?.body || '')
   const [errors, setErrors] = useState<{ title?: string; body?: string }>({})
   const [isLoading, setIsLoading] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const validateForm = () => {
     const newErrors: { title?: string; body?: string } = {}
@@ -43,7 +44,6 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitError(null)
     
     if (!validateForm()) {
       return
@@ -53,20 +53,22 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
     
     try {
       await onSubmit({ title: title.trim(), body: body.trim() })
+      // Show success toast
+      toast.success(isEditing ? 'Post updated successfully!' : 'Post created successfully!')
+      // Reset form if creating a new post
+      if (!isEditing) {
+        setTitle('')
+        setBody('')
+      }
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'An error occurred')
+      // Show error toast with the actual error message
+      toast.error(error instanceof Error ? error.message : 'An error occurred')
       setIsLoading(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className={SPACING.form.gap}>
-      {submitError && (
-        <div className={`rounded-md bg-red-50 ${SPACING.component.paddingSmall} ${TYPOGRAPHY.body.small} text-red-600`}>
-          {submitError}
-        </div>
-      )}
-      
       <div className={SPACING.form.inputGap}>
         <label htmlFor="title" className={`block ${TYPOGRAPHY.label.base} mb-2`}>
           Title
