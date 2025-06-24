@@ -14,7 +14,7 @@ export default function MyPostPage() {
             <h2 className="text-xl font-semibold mb-4">Your Current Post</h2>
             <p className="text-muted-foreground">You haven&apos;t created a post yet.</p>
             <Link
-              href="/edit"
+              href="/new-post"
               className="inline-block mt-4 px-4 py-2 bg-foreground text-background rounded-md hover:opacity-90 transition-opacity"
             >
               Create Your First Post

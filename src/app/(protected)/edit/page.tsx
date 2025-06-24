@@ -1,61 +1,118 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import PostForm from '@/components/PostForm'
+import { getPostById, updatePost } from '@/lib/posts'
+import { useAuth } from '@/contexts/AuthContext'
+import { useSupabase } from '@/providers/supabase-provider'
 
-export default function EditPage() {
-  const [content, setContent] = useState('')
+function EditPageContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('id')
+  const { user } = useAuth()
+  const { supabase } = useSupabase()
+  const [post, setPost] = useState<{ title: string; body: string } | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Implement post creation/update logic with Supabase
-    console.log('Submitting post:', content)
+  useEffect(() => {
+    if (!postId) {
+      router.push('/new-post')
+      return
+    }
+
+    const fetchPost = async () => {
+      if (!supabase) {
+        setError('Unable to connect to database')
+        setIsLoading(false)
+        return
+      }
+      
+      try {
+        const data = await getPostById(supabase, postId)
+        if (!data) {
+          throw new Error('Post not found')
+        }
+        if (data.user_id !== user?.id) {
+          throw new Error('You can only edit your own posts')
+        }
+        setPost({
+          title: data.title,
+          body: data.body || '',
+        })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load post')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchPost()
+  }, [postId, user?.id, router, supabase])
+
+  const handleSubmit = async (data: { title: string; body: string }) => {
+    if (!postId || !user || !supabase) {
+      throw new Error('Invalid state')
+    }
+
+    await updatePost(supabase, postId, {
+      title: data.title,
+      body: data.body,
+    })
+
     router.push('/my-post')
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen p-4 flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen p-4">
+        <div className="max-w-4xl mx-auto py-6">
+          <div className="rounded-md bg-red-50 p-4 text-red-600">
+            <p>{error}</p>
+            <button
+              onClick={() => router.push('/my-post')}
+              className="mt-2 text-sm underline"
+            >
+              Go back to your posts
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen p-4">
       <header className="max-w-4xl mx-auto py-6">
-        <h1 className="text-3xl font-bold">Create/Edit Post</h1>
-        <p className="text-muted-foreground mt-2">Share your ephemeral thought</p>
+        <h1 className="text-3xl font-bold">Edit Post</h1>
+        <p className="text-muted-foreground mt-2">Update your ephemeral thought</p>
       </header>
 
       <main className="max-w-4xl mx-auto">
-        <form onSubmit={handleSubmit} className="mt-8">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="content" className="block text-sm font-medium mb-2">
-                Your Ephemeral Thought
-              </label>
-              <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full p-4 border rounded-lg min-h-[200px] focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                placeholder="What's on your mind? Remember, this post will disappear after 24 hours..."
-                required
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-foreground text-background rounded-md hover:opacity-90 transition-opacity"
-              >
-                Publish Post
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push('/my-post')}
-                className="px-6 py-2 border rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </form>
+        {post && <PostForm initialData={post} onSubmit={handleSubmit} isEditing />}
       </main>
     </div>
+  )
+}
+
+export default function EditPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen p-4 flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    }>
+      <EditPageContent />
+    </Suspense>
   )
 }
