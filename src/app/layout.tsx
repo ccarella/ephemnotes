@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import SupabaseProvider from '@/providers/supabase-provider'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { FarcasterAuthProvider } from '@/contexts/FarcasterAuthContext'
 import { ToastProvider } from '@/lib/toast'
 import { NetworkStatusProvider } from '@/components/NetworkStatusProvider'
 import { FarcasterSplash } from '@/components/FarcasterSplash'
@@ -47,11 +48,13 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <SupabaseProvider>
           <AuthProvider>
-            <ToastProvider>
-              <FarcasterSplash />
-              <NetworkStatusProvider />
-              {children}
-            </ToastProvider>
+            <FarcasterAuthProvider>
+              <ToastProvider>
+                <FarcasterSplash />
+                <NetworkStatusProvider />
+                {children}
+              </ToastProvider>
+            </FarcasterAuthProvider>
           </AuthProvider>
         </SupabaseProvider>
       </body>

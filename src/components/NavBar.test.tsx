@@ -3,13 +3,19 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NavBar } from './NavBar'
 import { useAuth } from '@/contexts/AuthContext'
+import { useFarcasterAuth } from '@/contexts/FarcasterAuthContext'
 import type { User, Session } from '@supabase/supabase-js'
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: vi.fn(),
 }))
 
+vi.mock('@/contexts/FarcasterAuthContext', () => ({
+  useFarcasterAuth: vi.fn(),
+}))
+
 const mockUseAuth = vi.mocked(useAuth)
+const mockUseFarcasterAuth = vi.mocked(useFarcasterAuth)
 
 describe('NavBar', () => {
   const mockUser = {
@@ -22,6 +28,21 @@ describe('NavBar', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    // Default mock for FarcasterAuth
+    mockUseFarcasterAuth.mockReturnValue({
+      user: null,
+      session: null,
+      loading: false,
+      error: null,
+      signIn: vi.fn(),
+      signUp: vi.fn(),
+      signOut: vi.fn(),
+      signInWithMagicLink: vi.fn(),
+      isInFrame: false,
+      farcasterUser: null,
+      authenticateWithQuickAuth: vi.fn(),
+      authenticateWithSIWF: vi.fn(),
+    })
   })
 
   it('renders logo and sign in button when user is not authenticated', () => {
