@@ -1,10 +1,11 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { EmailValidationPage } from '@/components/EmailValidationPage'
 import { useSupabase } from '@/providers/supabase-provider'
 
-export default function EmailValidation() {
+function EmailValidationContent() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
   const { supabase } = useSupabase()
@@ -32,4 +33,12 @@ export default function EmailValidation() {
   }
 
   return <EmailValidationPage email={email || undefined} onResend={handleResend} />
+}
+
+export default function EmailValidation() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EmailValidationContent />
+    </Suspense>
+  )
 }

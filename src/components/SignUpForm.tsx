@@ -3,7 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/lib/toast'
-import { signupSchema, validateForm, getFieldError } from '@/lib/formValidation'
+import { signupSchema, validateForm, validateField } from '@/lib/formValidation'
 import { TOUCH_TARGETS, SPACING, TYPOGRAPHY } from '@/lib/responsive'
 import { getAuthErrorMessage } from '@/lib/authErrors'
 
@@ -60,7 +60,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
     
     // Clear error when user starts typing
     if (validationErrors.email) {
-      const error = await getFieldError(signupSchema, 'email', value)
+      const error = await validateField(signupSchema, 'email', value)
       setValidationErrors(prev => ({
         ...prev,
         email: error || ''
@@ -73,7 +73,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
     
     // Clear error when user starts typing
     if (validationErrors.password) {
-      const error = await getFieldError(signupSchema, 'password', value)
+      const error = await validateField(signupSchema, 'password', value)
       setValidationErrors(prev => ({
         ...prev,
         password: error || ''
