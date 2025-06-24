@@ -14,7 +14,7 @@ describe('POST /api/post', () => {
   })
 
   it('should create a new post successfully', async () => {
-    const mockUser = { id: 'user123' }
+    const mockUser = { id: 'user123', email: 'testuser@example.com' }
     const newPostData = {
       title: 'New Test Post',
       body: 'New test body content',
@@ -54,7 +54,8 @@ describe('POST /api/post', () => {
     expect(mockSupabase.from).toHaveBeenCalledWith('posts')
     expect(mockSupabase.insert).toHaveBeenCalledWith({
       ...newPostData,
-      user_id: 'user123'
+      user_id: 'user123',
+      username: 'testuser'
     })
   })
 

@@ -6,6 +6,7 @@ import PostForm from '@/components/PostForm'
 import { getPostById, updatePost } from '@/lib/posts'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSupabase } from '@/providers/supabase-provider'
+import { SPACING, TYPOGRAPHY } from '@/lib/responsive'
 
 function EditPageContent() {
   const router = useRouter()
@@ -67,24 +68,28 @@ function EditPageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen p-4 flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className={SPACING.container.padding}>
+          <p>Loading...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen p-4">
-        <div className="max-w-4xl mx-auto py-6">
-          <div className="rounded-md bg-red-50 p-4 text-red-600">
-            <p>{error}</p>
-            <button
-              onClick={() => router.push('/my-post')}
-              className="mt-2 text-sm underline"
-            >
-              Go back to your posts
-            </button>
+      <div className="min-h-screen">
+        <div className={`${SPACING.container.padding} ${SPACING.container.maxWidthNarrow}`}>
+          <div className={SPACING.section.paddingSmall}>
+            <div className={`rounded-md bg-red-50 ${SPACING.component.padding} text-red-600`}>
+              <p>{error}</p>
+              <button
+                onClick={() => router.push('/my-post')}
+                className={`mt-2 ${TYPOGRAPHY.body.small} underline`}
+              >
+                Go back to your posts
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -92,15 +97,17 @@ function EditPageContent() {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      <header className="max-w-4xl mx-auto py-6">
-        <h1 className="text-3xl font-bold">Edit Post</h1>
-        <p className="text-muted-foreground mt-2">Update your ephemeral thought</p>
-      </header>
+    <div className="min-h-screen">
+      <div className={`${SPACING.container.padding} ${SPACING.container.maxWidthNarrow}`}>
+        <header className={SPACING.section.paddingSmall}>
+          <h1 className={TYPOGRAPHY.heading.h1}>Edit Post</h1>
+          <p className={`${TYPOGRAPHY.body.base} text-muted-foreground mt-2`}>Update your ephemeral thought</p>
+        </header>
 
-      <main className="max-w-4xl mx-auto">
-        {post && <PostForm initialData={post} onSubmit={handleSubmit} isEditing />}
-      </main>
+        <main>
+          {post && <PostForm initialData={post} onSubmit={handleSubmit} isEditing />}
+        </main>
+      </div>
     </div>
   )
 }
@@ -108,8 +115,10 @@ function EditPageContent() {
 export default function EditPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen p-4 flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className={SPACING.container.padding}>
+          <p>Loading...</p>
+        </div>
       </div>
     }>
       <EditPageContent />

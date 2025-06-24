@@ -51,7 +51,10 @@ describe('PostItem', () => {
     render(<PostItem post={postWithLongTitle} />)
     
     const titleElement = screen.getByTestId('post-title')
-    expect(titleElement).toHaveClass('truncate')
+    // Check for responsive truncation classes
+    expect(titleElement).toHaveClass('line-clamp-1')
+    expect(titleElement).toHaveClass('sm:line-clamp-none')
+    expect(titleElement).toHaveClass('sm:truncate')
   })
 
   it('applies correct styling for post item', () => {
