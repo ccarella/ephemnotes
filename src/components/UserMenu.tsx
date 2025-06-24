@@ -50,6 +50,11 @@ export function UserMenu() {
     router.push('/my-post')
   }
 
+  const handleCreatePost = () => {
+    setIsOpen(false)
+    router.push('/new-post')
+  }
+
   const avatarUrl = user.user_metadata?.avatar_url
   const userEmail = user.email || ''
   const userInitial = userEmail.charAt(0).toUpperCase()
@@ -90,6 +95,27 @@ export function UserMenu() {
           </div>
 
           <div className="py-1">
+            <button
+              onClick={handleCreatePost}
+              className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              role="menuitem"
+            >
+              <svg
+                className="mr-3 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Create Post
+            </button>
+
             <button
               onClick={handleMyPosts}
               className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
