@@ -1,7 +1,7 @@
 'use client'
 
 import { PostItem } from './PostItem'
-import type { Post } from '@/lib/database.types'
+import type { Post } from '@/lib/posts'
 
 interface PostFeedProps {
   posts?: Post[] | null

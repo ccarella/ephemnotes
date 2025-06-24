@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import type { Post } from '@/lib/database.types'
+import type { Post } from '@/lib/posts'
 
 interface PostItemProps {
   post?: Post

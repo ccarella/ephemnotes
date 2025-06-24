@@ -5,15 +5,15 @@ import { getPosts } from '@/lib/posts'
 import { Suspense } from 'react'
 
 async function PostsList() {
-  let posts = []
-  let error = null
+  let posts: Awaited<ReturnType<typeof getPosts>> = []
+  let error: Error | null = null
 
   try {
     const supabase = await createServerSupabaseClient()
     posts = await getPosts(supabase)
   } catch (err) {
     console.error('Error fetching posts:', err)
-    error = err
+    error = err instanceof Error ? err : new Error('Failed to fetch posts')
   }
 
   return <PostFeed posts={posts} error={error} />

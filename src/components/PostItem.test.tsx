@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { PostItem } from './PostItem'
-import type { Post } from '@/lib/database.types'
+import type { Post } from '@/lib/posts'
 
 describe('PostItem', () => {
   const mockPost: Post = {
