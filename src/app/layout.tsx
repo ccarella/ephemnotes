@@ -5,6 +5,7 @@ import SupabaseProvider from '@/providers/supabase-provider'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/lib/toast'
 import { NetworkStatusProvider } from '@/components/NetworkStatusProvider'
+import { FarcasterSplash } from '@/components/FarcasterSplash'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -47,6 +48,7 @@ export default function RootLayout({
         <SupabaseProvider>
           <AuthProvider>
             <ToastProvider>
+              <FarcasterSplash />
               <NetworkStatusProvider />
               {children}
             </ToastProvider>
