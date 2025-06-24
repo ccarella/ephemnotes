@@ -44,8 +44,15 @@
   --color-muted: var(--foreground-muted);
   --color-border: var(--border);
   --color-primary: var(--primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-brand-blue: var(--brand-blue);
+  --color-border-grey: var(--border-grey);
+  --color-paper: var(--paper);
   --font-sans: var(--font-ui-sans);
   --font-mono: var(--font-mono-serif);
+  --font-serif: var(--font-display-serif);
 }
 
 /* Light theme only per style guide */
@@ -253,6 +260,12 @@ a {
 
 a:hover {
   opacity: 0.8;
+}
+
+/* Reset link colors for nested elements */
+a h1, a h2, a h3, a h4, a h5, a h6,
+a p, a span, a div {
+  color: inherit;
 }
 
 /* Card and surface styling */

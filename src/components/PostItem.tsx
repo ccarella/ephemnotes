@@ -73,15 +73,18 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
         {/* Title */}
         <h3 
           data-testid="post-title" 
-          className="text-display-2 font-semibold text-text-primary mb-4"
-          style={{ fontWeight: 600 }}
+          className="text-display-2 font-semibold mb-4"
+          style={{ 
+            fontWeight: 600,
+            color: '#111111'
+          }}
         >
           {title}
         </h3>
         
         {/* Body preview */}
         {body && (
-          <p className="text-body-lg text-text-primary leading-relaxed line-clamp-3">
+          <p className="text-body-lg leading-relaxed line-clamp-3" style={{ color: '#111111' }}>
             {body}
           </p>
         )}
@@ -89,7 +92,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
         {/* Timestamp - positioned at bottom right */}
         {createdAt && (
           <time 
-            className="absolute bottom-0 right-0 text-caption text-text-muted"
+            className="absolute bottom-0 right-0 text-caption text-muted"
             dateTime={createdAt.toISOString()}
           >
             {formatTimestamp(createdAt)}

@@ -93,7 +93,7 @@ export function UserMenu() {
           className={`absolute ${isMobile ? 'left-0 right-0 -ml-4' : 'right-0'} mt-2 ${isMobile ? 'w-screen' : 'w-56'} origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 sm:left-auto sm:ml-0 sm:w-56`}
         >
           <div className="px-4 py-3 border-b border-gray-200">
-            <p className="text-sm text-text-muted">Signed in as</p>
+            <p className="text-sm text-muted">Signed in as</p>
             <p className="text-sm font-medium text-text-primary truncate">
               {userEmail}
             </p>
