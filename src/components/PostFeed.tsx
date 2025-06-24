@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { PostItem } from './PostItem'
 import type { Post } from '@/lib/posts'
 import { useToast } from '@/lib/toast'
+import { DatabaseInitGuide } from './DatabaseInitGuide'
 
 interface PostFeedProps {
   posts?: Post[] | null
@@ -51,11 +52,12 @@ export function PostFeed({ posts, isLoading = false, error = null, onRetry }: Po
   if (error) {
     // Check if it's a table not found error (database not initialized)
     const isTableNotFound =
-      error.message?.includes('relation') && error.message?.includes('does not exist')
+      (error.message?.includes('relation') && error.message?.includes('does not exist')) ||
+      error.message?.includes('posts') && error.message?.includes('does not exist')
 
-    // If table doesn't exist, treat it as empty state
+    // If table doesn't exist, show database initialization guide
     if (isTableNotFound) {
-      return <EmptyState onCreatePost={() => router.push('/new-post')} />
+      return <DatabaseInitGuide />
     }
 
     // Check if it's a network error
