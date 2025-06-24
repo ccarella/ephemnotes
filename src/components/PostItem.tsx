@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import type { Post } from '@/lib/posts'
 import { Skeleton } from '@/components/Skeleton'
+import { typography, layout, spacing, cn } from '@/lib/design-system'
 
 interface PostItemProps {
   post?: Post
@@ -13,102 +14,75 @@ interface PostItemProps {
 export function PostItem({ post, isLoading = false, href }: PostItemProps) {
   if (isLoading) {
     return (
-      <div 
-        data-testid="post-item-skeleton"
-        className="card animate-fade-in"
-      >
-        <div className="space-y-3">
-          {/* Header section with username and title */}
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-2">
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-5 w-full sm:w-48" />
-          </div>
-          
-          {/* Body preview - 2 lines */}
-          <div className="space-y-2">
+      <article className={cn(layout.card, 'animate-fade-in')}>
+        <div className={spacing.stack.md}>
+          <Skeleton className="h-7 w-3/4" />
+          <div className={spacing.stack.sm}>
             <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
           </div>
-          
-          {/* Timestamp */}
-          <Skeleton className="h-3 w-32 mt-4" />
+          <Skeleton className="h-3 w-24" />
         </div>
-      </div>
+      </article>
     )
   }
 
-  const title = post?.title || '(Untitled)'
+  const title = post?.title || 'Untitled'
   const body = post?.body || ''
   const createdAt = post?.created_at ? new Date(post.created_at) : null
   
-  // Format timestamp for display
+  // Format timestamp for minimal display
   const formatTimestamp = (date: Date | null) => {
     if (!date) return ''
     const now = new Date()
     const diff = now.getTime() - date.getTime()
+    const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
     
-    if (days === 0) {
-      const hours = Math.floor(diff / (1000 * 60 * 60))
-      if (hours === 0) {
-        const minutes = Math.floor(diff / (1000 * 60))
-        return minutes <= 1 ? 'just now' : `${minutes}m ago`
-      }
-      return `${hours}h ago`
-    } else if (days === 1) {
-      return 'yesterday'
-    } else if (days < 7) {
-      return `${days}d ago`
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    }
+    if (hours < 1) return 'Now'
+    if (hours < 24) return `${hours}h`
+    if (days < 7) return `${days}d`
+    if (days < 30) return `${Math.floor(days / 7)}w`
+    
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    })
   }
 
   const content = (
-    <div 
-      data-testid="post-item"
-      className={`card transition-all duration-150 ${href ? 'cursor-pointer' : ''}`}
-    >
-      <div className="relative">
-        {/* Title */}
-        <h3 
-          data-testid="post-title" 
-          className="text-display-2 font-semibold mb-4"
-          style={{ 
-            fontWeight: 600,
-            color: '#111111'
-          }}
-        >
+    <article className={cn(layout.card, href && 'cursor-pointer')}>
+      <div className={spacing.stack.sm}>
+        {/* Title - clean and prominent */}
+        <h2 className={cn(typography.h2, 'text-foreground')}>
           {title}
-        </h3>
+        </h2>
         
-        {/* Body preview */}
+        {/* Body preview - optimized for readability */}
         {body && (
-          <p className="text-body-lg leading-relaxed line-clamp-3" style={{ color: '#111111' }}>
+          <p className={cn(typography.body.DEFAULT, 'text-secondary line-clamp-3')}>
             {body}
           </p>
         )}
         
-        {/* Timestamp - positioned at bottom right */}
+        {/* Minimal timestamp */}
         {createdAt && (
           <time 
-            className="absolute bottom-0 right-0 text-caption text-muted"
+            className={cn(typography.ui.small, 'text-muted')}
             dateTime={createdAt.toISOString()}
           >
             {formatTimestamp(createdAt)}
           </time>
         )}
       </div>
-    </div>
+    </article>
   )
 
   if (href) {
     return (
-      <Link 
-        href={href} 
-        className="block focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
-        style={{ borderRadius: '24px' }}
-      >
+      <Link href={href} className="block no-underline">
         {content}
       </Link>
     )

@@ -5,6 +5,7 @@ import PostForm from '@/components/PostForm'
 import { createPost } from '@/lib/posts'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSupabase } from '@/providers/supabase-provider'
+import { typography, presets } from '@/lib/design-system'
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -27,18 +28,16 @@ export default function NewPostPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-3xl mx-auto px-6">
-        <header style={{ marginTop: '72px' }}>
-          <h1 className="text-display-1 font-serif text-text-primary" style={{ fontWeight: 500 }}>
-            Create Post
-          </h1>
-        </header>
+    <div className={presets.contentPage}>
+      <header className="mb-8">
+        <h1 className={typography.title}>
+          Write
+        </h1>
+      </header>
 
-        <main style={{ marginTop: '32px' }}>
-          <PostForm onSubmit={handleSubmit} />
-        </main>
-      </div>
+      <main>
+        <PostForm onSubmit={handleSubmit} />
+      </main>
     </div>
   )
 }

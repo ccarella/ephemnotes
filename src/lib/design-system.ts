@@ -1,206 +1,164 @@
 /**
- * Centralized design system for consistent, minimalist UI
+ * Minimal design system inspired by iA Writer
+ * Focus on typography, readability, and distraction-free writing
  */
 
-// Enhanced color palette
+// Minimal color palette
 export const colors = {
-  background: 'bg-background',
-  foreground: 'text-foreground',
-  muted: 'text-muted',
-  border: 'border-border',
-  primary: {
-    DEFAULT: 'bg-primary text-white',
-    hover: 'hover:bg-primary-hover',
-    text: 'text-primary',
+  text: {
+    primary: 'text-foreground',
+    secondary: 'text-secondary',
+    muted: 'text-muted',
+    link: 'text-link',
   },
-  error: 'text-red-600 dark:text-red-400',
-  success: 'text-green-600 dark:text-green-400',
+  background: {
+    primary: 'bg-background',
+    secondary: 'bg-background-secondary',
+  },
+  border: {
+    DEFAULT: 'border-border',
+    light: 'border-border-light',
+  },
 } as const
 
-// Typography system with improved readability
+// Typography system optimized for reading and writing
 export const typography = {
-  // Headings with better tracking and weight
-  h1: 'text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight',
-  h2: 'text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight leading-tight',
-  h3: 'text-lg sm:text-xl lg:text-2xl font-medium tracking-tight',
-  h4: 'text-base sm:text-lg lg:text-xl font-medium',
+  // Document title
+  title: 'text-3xl font-bold leading-tight tracking-tight',
   
-  // Body text with improved line height
+  // Section headings
+  h1: 'text-2xl font-bold leading-tight',
+  h2: 'text-xl font-semibold leading-snug',
+  h3: 'text-lg font-semibold',
+  h4: 'text-base font-semibold',
+  
+  // Body text with optimal line height
   body: {
-    DEFAULT: 'text-base leading-relaxed',
-    large: 'text-lg leading-relaxed',
-    small: 'text-sm leading-relaxed',
-    xs: 'text-xs',
+    DEFAULT: 'text-base leading-[1.8]',
+    large: 'text-lg leading-[1.8]',
+    small: 'text-sm leading-[1.7]',
   },
   
-  // Special text styles
-  label: 'text-sm font-medium text-foreground',
-  muted: 'text-sm text-muted',
-  error: 'text-sm text-red-600 dark:text-red-400',
-  caption: 'text-xs text-muted',
+  // UI text
+  ui: {
+    DEFAULT: 'text-sm',
+    small: 'text-xs',
+    tiny: 'text-[11px]',
+  },
+  
+  // Special styles
+  meta: 'text-xs text-muted uppercase tracking-wide',
+  caption: 'text-sm text-secondary',
+  
+  // Writing mode
+  writing: 'font-writing text-lg leading-[1.9] tracking-[0.01em]',
 } as const
 
-// Button styles - minimalist approach
+// Minimal button styles
 export const buttons = {
-  base: 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]',
+  base: 'inline-flex items-center justify-center font-medium transition-opacity duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-3 disabled:opacity-50 disabled:cursor-not-allowed active:transform active:translate-y-px',
   
   variants: {
-    primary: 'bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow-md',
-    secondary: 'bg-transparent border border-border hover:bg-gray-50 dark:hover:bg-gray-900',
-    ghost: 'hover:bg-gray-100 dark:hover:bg-gray-900',
-    danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+    primary: 'bg-foreground text-background hover:opacity-85',
+    secondary: 'bg-transparent text-foreground border border-border hover:bg-background-secondary',
+    ghost: 'text-secondary hover:text-foreground hover:bg-background-secondary',
+    text: 'text-link hover:text-foreground',
   },
   
   sizes: {
-    sm: 'h-9 px-3 text-sm gap-1.5',
-    md: 'h-10 px-4 gap-2',
-    lg: 'h-11 px-6 gap-2',
-    icon: 'h-10 w-10',
+    sm: 'h-8 px-3 text-xs rounded',
+    md: 'h-9 px-4 text-sm rounded',
+    lg: 'h-10 px-6 text-base rounded',
   },
 } as const
 
-// Form elements - clean and accessible
+// Clean form elements
 export const forms = {
-  input: 'w-full px-3 py-2 rounded-lg border border-border bg-transparent transition-all duration-200 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20',
+  input: 'w-full bg-background border border-border rounded px-3 py-2 text-base transition-colors duration-200 placeholder:text-muted focus:border-focus focus:outline-none',
   
-  textarea: 'w-full px-3 py-2 rounded-lg border border-border bg-transparent transition-all duration-200 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 resize-none',
+  textarea: 'w-full bg-background border border-border rounded px-3 py-2 text-base leading-[1.8] transition-colors duration-200 placeholder:text-muted focus:border-focus focus:outline-none resize-vertical min-h-[120px]',
   
-  select: 'w-full px-3 py-2 rounded-lg border border-border bg-transparent transition-all duration-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20',
+  select: 'w-full bg-background border border-border rounded px-3 py-2 text-base transition-colors duration-200 focus:border-focus focus:outline-none appearance-none',
   
-  checkbox: 'h-4 w-4 rounded border-border text-primary focus:ring-primary focus:ring-offset-2',
+  label: 'block text-sm font-medium mb-1.5',
   
-  radio: 'h-4 w-4 border-border text-primary focus:ring-primary focus:ring-offset-2',
+  helper: 'text-xs text-secondary mt-1',
   
-  label: 'text-sm font-medium text-foreground',
-  
-  helper: 'text-xs text-muted mt-1',
-  
-  error: 'text-xs text-red-600 dark:text-red-400 mt-1',
-  
-  group: 'space-y-1.5',
-  
-  fieldset: 'space-y-4',
+  error: 'text-xs text-red-600 mt-1',
 } as const
 
 // Layout components
 export const layout = {
-  // Containers
-  container: 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
-  containerNarrow: 'mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8',
+  // Content containers
+  container: 'content-container',
+  wide: 'max-w-5xl mx-auto px-6',
   
-  // Sections
-  section: 'py-12 sm:py-16 lg:py-20',
-  sectionTight: 'py-8 sm:py-10 lg:py-12',
+  // Page layouts
+  page: 'min-h-screen bg-background',
+  centered: 'min-h-screen flex items-center justify-center px-4',
   
-  // Cards with subtle styling
-  card: 'rounded-xl bg-background border border-border p-6 shadow-sm transition-shadow hover:shadow-md',
-  cardCompact: 'rounded-lg bg-background border border-border p-4 shadow-sm',
+  // Content sections
+  section: 'py-12',
+  prose: 'prose prose-lg max-w-none',
   
-  // Modal styling
-  modal: {
-    overlay: 'fixed inset-0 z-50 bg-black/20 backdrop-blur-sm animate-fade-in',
-    container: 'fixed inset-0 z-50 flex items-center justify-center p-4',
-    content: 'relative w-full max-w-md rounded-xl bg-background border border-border p-6 shadow-xl animate-fade-in',
-    title: 'text-lg font-semibold',
-    description: 'text-sm text-muted mt-2',
-  },
+  // Cards - minimal style
+  card: 'bg-background border border-border-light rounded p-6 transition-colors hover:border-border',
   
   // Navigation
   nav: {
-    container: 'sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-lg',
-    content: 'mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8',
-    logo: 'text-lg font-semibold',
-    link: 'text-sm font-medium text-muted hover:text-foreground transition-colors',
-    linkActive: 'text-sm font-medium text-foreground',
+    container: 'sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border-light',
+    content: 'content-container flex items-center justify-between h-14',
+    link: 'text-sm text-secondary hover:text-foreground transition-colors no-underline',
+    linkActive: 'text-sm text-foreground font-medium no-underline',
+  },
+  
+  // Modals
+  modal: {
+    overlay: 'fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
+    container: 'fixed inset-0 z-50 flex items-center justify-center p-4',
+    content: 'relative w-full max-w-lg bg-background border border-border rounded-lg p-8 shadow-sm',
   },
 } as const
 
 // Spacing system
 export const spacing = {
-  // Consistent gaps
+  // Content spacing
+  paragraph: 'mb-6',
+  section: 'mb-12',
+  
+  // UI spacing
   gap: {
-    xs: 'gap-2',
-    sm: 'gap-3',
+    xs: 'gap-1',
+    sm: 'gap-2',
     md: 'gap-4',
     lg: 'gap-6',
     xl: 'gap-8',
   },
   
-  // Stack spacing (vertical)
   stack: {
-    xs: 'space-y-2',
-    sm: 'space-y-3',
+    xs: 'space-y-1',
+    sm: 'space-y-2',
     md: 'space-y-4',
     lg: 'space-y-6',
     xl: 'space-y-8',
-  },
-  
-  // Inline spacing (horizontal)
-  inline: {
-    xs: 'space-x-2',
-    sm: 'space-x-3',
-    md: 'space-x-4',
-    lg: 'space-x-6',
-    xl: 'space-x-8',
-  },
-} as const
-
-// Animation utilities
-export const animation = {
-  transition: {
-    all: 'transition-all duration-200 ease-out',
-    colors: 'transition-colors duration-200 ease-out',
-    opacity: 'transition-opacity duration-200 ease-out',
-    transform: 'transition-transform duration-200 ease-out',
-  },
-  
-  hover: {
-    scale: 'hover:scale-[1.02]',
-    opacity: 'hover:opacity-80',
-    shadow: 'hover:shadow-md',
-  },
-  
-  keyframes: {
-    fadeIn: 'animate-fade-in',
-    shrink: 'animate-shrink',
   },
 } as const
 
 // Utility classes
 export const utils = {
   // Focus states
-  focusRing: 'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-  focusVisible: 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-  
-  // Borders
-  border: {
-    DEFAULT: 'border border-border',
-    subtle: 'border border-subtle',
-    none: 'border-0',
-  },
-  
-  // Shadows
-  shadow: {
-    sm: 'shadow-sm',
-    md: 'shadow-md',
-    lg: 'shadow-lg',
-    none: 'shadow-none',
-  },
-  
-  // Radius
-  radius: {
-    sm: 'rounded',
-    md: 'rounded-lg',
-    lg: 'rounded-xl',
-    full: 'rounded-full',
-  },
+  focusRing: 'focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-3',
   
   // Text utilities
-  text: {
-    truncate: 'truncate',
-    nowrap: 'whitespace-nowrap',
-    balance: 'text-balance',
-  },
+  truncate: 'truncate',
+  nowrap: 'whitespace-nowrap',
+  
+  // Writing focus mode
+  focusMode: 'focus-mode',
+  writingMode: 'writing-mode',
+  
+  // Transitions
+  transition: 'transition-colors duration-200',
 } as const
 
 // Helper function to combine classes
@@ -208,21 +166,23 @@ export const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ')
 }
 
-// Export common combinations
+// Common presets
 export const presets = {
-  // Page layouts
-  authPage: cn(layout.container, 'min-h-screen flex items-center justify-center py-12'),
-  dashboardPage: cn(layout.container, layout.section),
-  
-  // Common components
+  // Buttons
   primaryButton: cn(buttons.base, buttons.variants.primary, buttons.sizes.md),
   secondaryButton: cn(buttons.base, buttons.variants.secondary, buttons.sizes.md),
-  formField: cn(forms.group),
-  textInput: forms.input,
+  ghostButton: cn(buttons.base, buttons.variants.ghost, buttons.sizes.md),
   
-  // Typography presets
-  pageTitle: typography.h1,
-  sectionTitle: typography.h2,
-  cardTitle: typography.h3,
+  // Forms
+  textInput: forms.input,
+  textArea: forms.textarea,
+  
+  // Typography
+  pageTitle: typography.title,
+  sectionTitle: typography.h1,
   bodyText: typography.body.DEFAULT,
+  
+  // Pages
+  authPage: cn(layout.page, layout.centered),
+  contentPage: cn(layout.page, layout.container, 'py-8'),
 } as const

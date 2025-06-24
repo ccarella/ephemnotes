@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { SignInForm } from '@/components/SignInForm'
+import { typography, spacing, cn } from '@/lib/design-system'
 
 export const metadata: Metadata = {
   title: 'Sign In - EphemNotes',
@@ -8,28 +9,21 @@ export const metadata: Metadata = {
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">
-            Sign In
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Enter your email address and we&apos;ll send you a magic link to sign in instantly. 
-            No password required.
-          </p>
-        </div>
-        
-        <div className="mt-8">
-          <SignInForm className="space-y-6" />
-        </div>
-        
-        <div className="text-center">
-          <p className="text-xs text-muted-foreground">
-            The magic link will expire in 1 hour for security.
-          </p>
-        </div>
+    <div className={spacing.stack.lg}>
+      <div className="text-center">
+        <h1 className={typography.h1}>
+          Sign In
+        </h1>
+        <p className={cn(typography.body.small, 'text-secondary mt-2')}>
+          Enter your email and we&apos;ll send you a magic link
+        </p>
       </div>
+      
+      <SignInForm />
+      
+      <p className={cn(typography.ui.small, 'text-muted text-center')}>
+        The magic link will expire in 1 hour
+      </p>
     </div>
   )
 }
