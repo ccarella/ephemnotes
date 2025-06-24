@@ -15,15 +15,8 @@ export async function getPosts(supabase: ReturnType<typeof createClient<Database
   return data
 }
 
-export async function getPostById(
-  supabase: ReturnType<typeof createClient<Database>>,
-  id: string
-) {
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('id', id)
-    .single()
+export async function getPostById(supabase: ReturnType<typeof createClient<Database>>, id: string) {
+  const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
 
   if (error) throw error
   return data
@@ -47,11 +40,7 @@ export async function createPost(
   supabase: ReturnType<typeof createClient<Database>>,
   post: PostInsert
 ) {
-  const { data, error } = await supabase
-    .from('posts')
-    .insert(post)
-    .select()
-    .single()
+  const { data, error } = await supabase.from('posts').insert(post).select().single()
 
   if (error) throw error
   return data
@@ -73,14 +62,8 @@ export async function updatePost(
   return data
 }
 
-export async function deletePost(
-  supabase: ReturnType<typeof createClient<Database>>,
-  id: string
-) {
-  const { error } = await supabase
-    .from('posts')
-    .delete()
-    .eq('id', id)
+export async function deletePost(supabase: ReturnType<typeof createClient<Database>>, id: string) {
+  const { error } = await supabase.from('posts').delete().eq('id', id)
 
   if (error) throw error
 }

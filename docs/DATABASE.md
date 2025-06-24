@@ -12,16 +12,16 @@ The `posts` table stores all user-generated content in the application.
 
 #### Schema
 
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| id | UUID | PRIMARY KEY, DEFAULT gen_random_uuid() | Unique identifier for each post |
-| user_id | UUID | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the post |
-| username | TEXT | NOT NULL | Username of the post author |
-| title | TEXT | NOT NULL | Title of the post |
-| body | TEXT | NULL | Content of the post |
-| published | BOOLEAN | DEFAULT false | Whether the post is published |
-| created_at | TIMESTAMP WITH TIME ZONE | DEFAULT now() | When the post was created |
-| updated_at | TIMESTAMP WITH TIME ZONE | DEFAULT now() | When the post was last updated |
+| Column     | Type                     | Constraints                                           | Description                         |
+| ---------- | ------------------------ | ----------------------------------------------------- | ----------------------------------- |
+| id         | UUID                     | PRIMARY KEY, DEFAULT gen_random_uuid()                | Unique identifier for each post     |
+| user_id    | UUID                     | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the post |
+| username   | TEXT                     | NOT NULL                                              | Username of the post author         |
+| title      | TEXT                     | NOT NULL                                              | Title of the post                   |
+| body       | TEXT                     | NULL                                                  | Content of the post                 |
+| published  | BOOLEAN                  | DEFAULT false                                         | Whether the post is published       |
+| created_at | TIMESTAMP WITH TIME ZONE | DEFAULT now()                                         | When the post was created           |
+| updated_at | TIMESTAMP WITH TIME ZONE | DEFAULT now()                                         | When the post was last updated      |
 
 #### Constraints
 
@@ -36,16 +36,19 @@ The `posts` table stores all user-generated content in the application.
 RLS is enabled on the posts table with the following policies:
 
 ### Read Policy: "Posts are viewable by everyone"
+
 - **Operation**: SELECT
 - **Check**: `true`
 - **Description**: All posts can be read by anyone, including anonymous users
 
 ### Insert Policy: "Users can insert their own posts"
+
 - **Operation**: INSERT
 - **Check**: `auth.uid() = user_id`
 - **Description**: Users can only create posts where they are the author
 
 ### Update Policy: "Users can update their own posts"
+
 - **Operation**: UPDATE
 - **Using**: `auth.uid() = user_id`
 - **With Check**: `auth.uid() = user_id`
@@ -80,15 +83,18 @@ Post-related database operations are abstracted in `src/lib/posts.ts`:
 ## Migrations
 
 Database migrations are stored in `supabase/migrations/` and are applied automatically when:
+
 1. A Supabase development branch is created
 2. Changes are merged to production
 
 Current migrations:
+
 - `20241223_create_posts_table.sql`: Creates the posts table with RLS policies
 
 ## Development Setup
 
 1. Ensure you have the required environment variables in `.env.local`:
+
    ```
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
