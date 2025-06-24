@@ -9,7 +9,9 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   const { supabase } = useSupabase()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     router.push('/')
   }
 
