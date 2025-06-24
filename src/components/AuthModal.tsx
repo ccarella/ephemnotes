@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { MODAL, TOUCH_TARGETS, SPACING, TYPOGRAPHY } from '@/lib/responsive'
 
 type AuthModalProps = {
   isOpen: boolean
@@ -67,7 +68,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className={`${MODAL.overlay} flex items-center justify-center p-4 sm:p-6`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -76,16 +77,16 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800"
+        className={`${MODAL.content.fullMobile} rounded-none sm:rounded-lg bg-white ${MODAL.padding} shadow-lg dark:bg-gray-800`}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 id="auth-modal-title" className="text-2xl font-bold">
+          <h2 id="auth-modal-title" className={TYPOGRAPHY.heading.h3}>
             {mode === 'signin' ? 'Sign In' : 'Sign Up'}
           </h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className={`${TOUCH_TARGETS.iconButton} flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700`}
           >
             <svg
               className="h-6 w-6"
@@ -103,9 +104,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+        <form onSubmit={handleSubmit} className={SPACING.form.gap}>
+          <div className={SPACING.form.inputGap}>
+            <label htmlFor="email" className={`block ${TYPOGRAPHY.label.base}`}>
               Email
             </label>
             <input
@@ -114,13 +115,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
               required
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
+          <div className={SPACING.form.inputGap}>
+            <label htmlFor="password" className={`block ${TYPOGRAPHY.label.base}`}>
               Password
             </label>
             <input
@@ -129,13 +130,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className={`w-full ${TOUCH_TARGETS.input} rounded-md border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white`}
               required
             />
           </div>
 
           {(error || validationError) && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+            <div className={`rounded-md bg-red-50 p-3 ${TYPOGRAPHY.body.small} text-red-600 dark:bg-red-900/20 dark:text-red-400`}>
               {validationError || error?.message}
             </div>
           )}
@@ -143,19 +144,19 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600"
+            className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600 ${TYPOGRAPHY.body.base}`}
           >
             {loading ? 'Loading...' : mode === 'signin' ? 'Sign In' : 'Sign Up'}
           </button>
         </form>
 
-        <div className="mt-4 text-center text-sm">
+        <div className={`mt-6 text-center ${TYPOGRAPHY.body.base}`}>
           {mode === 'signin' ? (
             <p>
               Don&apos;t have an account?{' '}
               <button
                 onClick={() => setMode('signup')}
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
               >
                 Sign up
               </button>
@@ -165,7 +166,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               Already have an account?{' '}
               <button
                 onClick={() => setMode('signin')}
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
               >
                 Sign in
               </button>

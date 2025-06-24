@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { TOUCH_TARGETS, SPACING, TYPOGRAPHY, LAYOUT } from '@/lib/responsive'
 
 interface PostFormProps {
   initialData?: {
@@ -59,15 +60,15 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className={SPACING.form.gap}>
       {submitError && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+        <div className={`rounded-md bg-red-50 ${SPACING.component.paddingSmall} ${TYPOGRAPHY.body.small} text-red-600`}>
           {submitError}
         </div>
       )}
       
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium mb-2">
+      <div className={SPACING.form.inputGap}>
+        <label htmlFor="title" className={`block ${TYPOGRAPHY.label.base} mb-2`}>
           Title
         </label>
         <input
@@ -80,7 +81,7 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
               setErrors({ ...errors, title: undefined })
             }
           }}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className={`w-full rounded-md border border-gray-300 ${TOUCH_TARGETS.input} focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
           placeholder="Enter your post title"
           aria-invalid={!!errors.title}
           aria-describedby={errors.title ? 'title-error' : undefined}
@@ -88,17 +89,17 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={100}
         />
         {errors.title && (
-          <p id="title-error" className="mt-1 text-sm text-red-600">
+          <p id="title-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
             {errors.title}
           </p>
         )}
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={`mt-1 ${TYPOGRAPHY.body.small} text-gray-500`}>
           {title.length}/100 characters
         </p>
       </div>
       
-      <div>
-        <label htmlFor="body" className="block text-sm font-medium mb-2">
+      <div className={SPACING.form.inputGap}>
+        <label htmlFor="body" className={`block ${TYPOGRAPHY.label.base} mb-2`}>
           Body
         </label>
         <textarea
@@ -110,7 +111,7 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
               setErrors({ ...errors, body: undefined })
             }
           }}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 min-h-[200px]"
+          className={`w-full rounded-md border border-gray-300 ${TOUCH_TARGETS.textarea} focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 min-h-[150px] sm:min-h-[200px]`}
           placeholder="What's on your mind? Remember, this post will disappear after 24 hours..."
           aria-invalid={!!errors.body}
           aria-describedby={errors.body ? 'body-error' : undefined}
@@ -118,20 +119,20 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={1000}
         />
         {errors.body && (
-          <p id="body-error" className="mt-1 text-sm text-red-600">
+          <p id="body-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
             {errors.body}
           </p>
         )}
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={`mt-1 ${TYPOGRAPHY.body.small} text-gray-500`}>
           {body.length}/1000 characters
         </p>
       </div>
       
-      <div className="flex gap-4">
+      <div className={`${LAYOUT.responsiveRow} ${SPACING.component.gapSmall} w-full sm:w-auto`}>
         <button
           type="submit"
           disabled={isLoading}
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`${TOUCH_TARGETS.button} ${TYPOGRAPHY.body.base} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto`}
         >
           {isLoading ? 'Loading...' : isEditing ? 'Update Post' : 'Publish Post'}
         </button>
@@ -139,7 +140,7 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           type="button"
           onClick={() => router.back()}
           disabled={isLoading}
-          className="rounded-md border border-gray-300 px-4 py-2 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`${TOUCH_TARGETS.button} ${TYPOGRAPHY.body.base} rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto`}
         >
           Cancel
         </button>

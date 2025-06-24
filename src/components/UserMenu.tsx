@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { TOUCH_TARGETS, matchesBreakpoint } from '@/lib/responsive'
 
 export function UserMenu() {
   const { user, signOut } = useAuth()
@@ -59,6 +60,9 @@ export function UserMenu() {
   const userEmail = user.email || ''
   const userInitial = userEmail.charAt(0).toUpperCase()
 
+  // Check if we're on mobile
+  const isMobile = typeof window !== 'undefined' && !matchesBreakpoint('sm')
+
   return (
     <div ref={menuRef} className="relative">
       <button
@@ -67,7 +71,7 @@ export function UserMenu() {
         aria-haspopup="true"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+        className={`${TOUCH_TARGETS.iconButton} flex items-center justify-center rounded-full bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`}
       >
         {avatarUrl ? (
           /* eslint-disable-next-line @next/next/no-img-element */
@@ -85,7 +89,7 @@ export function UserMenu() {
         <div
           role="menu"
           aria-label="User menu"
-          className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700"
+          className={`absolute ${isMobile ? 'left-0 right-0 -ml-4' : 'right-0'} mt-2 ${isMobile ? 'w-screen' : 'w-56'} origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700 sm:right-0 sm:left-auto sm:ml-0 sm:w-56`}
         >
           <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
             <p className="text-sm text-gray-500 dark:text-gray-400">Signed in as</p>
@@ -97,7 +101,7 @@ export function UserMenu() {
           <div className="py-1">
             <button
               onClick={handleCreatePost}
-              className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
               role="menuitem"
             >
               <svg
@@ -118,7 +122,7 @@ export function UserMenu() {
 
             <button
               onClick={handleMyPosts}
-              className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
               role="menuitem"
             >
               <svg
@@ -139,7 +143,7 @@ export function UserMenu() {
 
             <button
               onClick={handleSignOut}
-              className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
               role="menuitem"
             >
               <svg
