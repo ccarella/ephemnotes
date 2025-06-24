@@ -3,6 +3,7 @@ import { PostFeed } from '@/components/PostFeed'
 import { createServerSupabaseClient } from '@/lib/supabase'
 import { getPosts } from '@/lib/posts'
 import { Suspense } from 'react'
+import Link from 'next/link'
 
 async function PostsList() {
   let posts: Awaited<ReturnType<typeof getPosts>> = []
@@ -44,18 +45,19 @@ export default function Home() {
             <PostsList />
           </Suspense>
           
-          <button 
-            onClick={() => window.location.href = '/new-post'}
-            className="bg-brand-blue text-white text-caption font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+          <Link 
+            href="/new-post"
+            className="bg-brand-blue text-white text-caption font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2 inline-flex items-center justify-center"
             style={{ 
               width: '240px',
               height: '48px',
               borderRadius: '4px',
-              marginTop: '40px'
+              marginTop: '40px',
+              textDecoration: 'none'
             }}
           >
             CREATE POST
-          </button>
+          </Link>
         </main>
       </div>
     </div>
