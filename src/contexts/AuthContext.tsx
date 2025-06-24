@@ -12,6 +12,7 @@ type AuthContextType = {
   error: AuthError | null
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string) => Promise<void>
+  signInWithMagicLink: (email: string) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -105,6 +106,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const signInWithMagicLink = async (email: string) => {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized')
+    }
+
+    setError(null)
+    setLoading(true)
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+
+      if (error) {
+        setError(error)
+        throw new Error(getAuthErrorMessage(error))
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const signOut = async () => {
     if (!supabase) {
       throw new Error('Supabase client not initialized')
@@ -131,6 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     error,
     signIn,
     signUp,
+    signInWithMagicLink,
     signOut,
   }
 
