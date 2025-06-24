@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NavBar } from './NavBar'
 import { useAuth } from '@/contexts/AuthContext'
+import type { User, Session } from '@supabase/supabase-js'
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: vi.fn(),
@@ -42,8 +43,8 @@ describe('NavBar', () => {
 
   it('renders user menu when user is authenticated', () => {
     mockUseAuth.mockReturnValue({
-      user: mockUser as any,
-      session: {} as any,
+      user: mockUser as User,
+      session: {} as Session,
       loading: false,
       error: null,
       signIn: vi.fn(),
@@ -151,7 +152,7 @@ describe('NavBar', () => {
   })
 
   it('navigates to home when logo is clicked', async () => {
-    const user = userEvent.setup()
+    // const user = userEvent.setup()
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,

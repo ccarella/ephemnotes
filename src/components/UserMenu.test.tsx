@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { UserMenu } from './UserMenu'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import type { User } from '@supabase/supabase-js'
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: vi.fn(),
@@ -31,8 +32,8 @@ describe('UserMenu', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockUseAuth.mockReturnValue({
-      user: mockUser as any,
-      session: {} as any,
+      user: mockUser as User,
+      session: null,
       loading: false,
       error: null,
       signIn: vi.fn(),
@@ -41,7 +42,12 @@ describe('UserMenu', () => {
     })
     mockUseRouter.mockReturnValue({
       push: mockPush,
-    } as any)
+      back: vi.fn(),
+      refresh: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      forward: vi.fn(),
+    })
   })
 
   it('renders user avatar trigger button', () => {
@@ -61,8 +67,8 @@ describe('UserMenu', () => {
 
   it('shows fallback avatar when no avatar URL', () => {
     mockUseAuth.mockReturnValue({
-      user: { ...mockUser, user_metadata: {} } as any,
-      session: {} as any,
+      user: { ...mockUser, user_metadata: {} } as User,
+      session: null,
       loading: false,
       error: null,
       signIn: vi.fn(),

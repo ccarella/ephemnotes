@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AuthModal } from './AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
@@ -87,7 +87,7 @@ describe('AuthModal', () => {
       user: null,
       session: null,
       loading: false,
-      error: error as any,
+      error: error as Error,
       signIn: mockSignIn,
       signUp: mockSignUp,
       signOut: vi.fn(),

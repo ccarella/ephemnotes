@@ -58,7 +58,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         await signUp(email, password)
       }
       onClose()
-    } catch (err) {
+    } catch {
       // Error is already handled in the auth context
     }
   }
@@ -152,7 +152,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <div className="mt-4 text-center text-sm">
           {mode === 'signin' ? (
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <button
                 onClick={() => setMode('signup')}
                 className="text-blue-600 hover:underline dark:text-blue-400"
