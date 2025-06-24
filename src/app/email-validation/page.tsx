@@ -2,17 +2,17 @@
 
 import { useSearchParams } from 'next/navigation'
 import { EmailValidationPage } from '@/components/EmailValidationPage'
-import { createClient } from '@/lib/supabase'
+import { useSupabase } from '@/providers/supabase-provider'
 
 export default function EmailValidation() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
-  const supabase = createClient()
+  const { supabase } = useSupabase()
 
   const handleResend = async () => {
     try {
-      if (!email) {
-        throw new Error('No email address provided')
+      if (!email || !supabase) {
+        throw new Error('No email address provided or Supabase not initialized')
       }
 
       const { error } = await supabase.auth.resend({
