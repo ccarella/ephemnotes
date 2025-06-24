@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { useSupabase } from '@/providers/supabase-provider'
+import { getAuthErrorMessage } from '@/lib/authErrors'
 
 type AuthContextType = {
   user: User | null
@@ -68,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         setError(error)
-        throw error
+        throw new Error(getAuthErrorMessage(error))
       }
     } catch (err) {
       // Keep the error in state even after throwing
@@ -97,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         setError(error)
-        throw error
+        throw new Error(getAuthErrorMessage(error))
       }
     } finally {
       setLoading(false)
@@ -116,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signOut()
       if (error) {
         setError(error)
-        throw error
+        throw new Error(getAuthErrorMessage(error))
       }
     } finally {
       setLoading(false)
