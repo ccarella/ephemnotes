@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#1a1a1a"/>
+  
+  <!-- EN text -->
+  <text x="256" y="256" font-family="system-ui, -apple-system, sans-serif" font-size="180" font-weight="700" text-anchor="middle" dominant-baseline="central" fill="#ffffff">EN</text>
+</svg>

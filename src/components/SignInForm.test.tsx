@@ -12,7 +12,7 @@ const mockToast = vi.hoisted(() => ({
 }))
 
 vi.mock('@/lib/toast', () => ({
-  toast: mockToast,
+  useToast: () => ({ toast: mockToast }),
 }))
 
 // Mock auth functions with vi.hoisted
