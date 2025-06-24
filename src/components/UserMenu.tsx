@@ -71,7 +71,8 @@ export function UserMenu() {
         aria-haspopup="true"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={`${TOUCH_TARGETS.iconButton} flex items-center justify-center rounded-full bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`}
+        className="flex items-center justify-center rounded-full bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+        style={{ width: '32px', height: '32px' }}
       >
         {avatarUrl ? (
           /* eslint-disable-next-line @next/next/no-img-element */
@@ -89,11 +90,11 @@ export function UserMenu() {
         <div
           role="menu"
           aria-label="User menu"
-          className={`absolute ${isMobile ? 'left-0 right-0 -ml-4' : 'right-0'} mt-2 ${isMobile ? 'w-screen' : 'w-56'} origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700 sm:right-0 sm:left-auto sm:ml-0 sm:w-56`}
+          className={`absolute ${isMobile ? 'left-0 right-0 -ml-4' : 'right-0'} mt-2 ${isMobile ? 'w-screen' : 'w-56'} origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 sm:left-auto sm:ml-0 sm:w-56`}
         >
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Signed in as</p>
-            <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+          <div className="px-4 py-3 border-b border-gray-200">
+            <p className="text-sm text-text-muted">Signed in as</p>
+            <p className="text-sm font-medium text-text-primary truncate">
               {userEmail}
             </p>
           </div>
@@ -101,7 +102,7 @@ export function UserMenu() {
           <div className="py-1">
             <button
               onClick={handleCreatePost}
-              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-text-primary hover:bg-gray-100`}
               role="menuitem"
             >
               <svg
@@ -122,7 +123,7 @@ export function UserMenu() {
 
             <button
               onClick={handleMyPosts}
-              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-text-primary hover:bg-gray-100`}
               role="menuitem"
             >
               <svg
@@ -143,7 +144,7 @@ export function UserMenu() {
 
             <button
               onClick={handleSignOut}
-              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white`}
+              className={`flex w-full items-center px-4 ${TOUCH_TARGETS.link} text-sm text-text-primary hover:bg-gray-100`}
               role="menuitem"
             >
               <svg

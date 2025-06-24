@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TOUCH_TARGETS, SPACING, TYPOGRAPHY, LAYOUT } from '@/lib/responsive'
 import { useToast } from '@/lib/toast'
 
 interface PostFormProps {
@@ -68,9 +67,9 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
   }
 
   return (
-    <form onSubmit={handleSubmit} className={SPACING.form.gap}>
-      <div className={SPACING.form.inputGap}>
-        <label htmlFor="title" className={`block ${TYPOGRAPHY.label.base} mb-2`}>
+    <form onSubmit={handleSubmit} className="space-y-6" style={{ maxWidth: '720px' }}>
+      <div>
+        <label htmlFor="title" className="block text-body-sm font-medium text-text-primary mb-2">
           Title
         </label>
         <input
@@ -83,7 +82,14 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
               setErrors({ ...errors, title: undefined })
             }
           }}
-          className={`w-full rounded-md border border-gray-300 ${TOUCH_TARGETS.input} focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+          className="w-full bg-white border border-ui-grey focus:border-ui-grey focus:outline-none focus:ring-0"
+          style={{
+            padding: '12px 16px',
+            borderRadius: '8px',
+            fontSize: '20px',
+            fontStyle: title ? 'normal' : 'italic',
+            color: title ? 'var(--text-primary)' : '#777777'
+          }}
           placeholder="Enter your post title"
           aria-invalid={!!errors.title}
           aria-describedby={errors.title ? 'title-error' : undefined}
@@ -91,17 +97,14 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={100}
         />
         {errors.title && (
-          <p id="title-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
+          <p id="title-error" className="mt-1 text-sm text-red-600">
             {errors.title}
           </p>
         )}
-        <p className={`mt-1 ${TYPOGRAPHY.body.small} text-gray-500`}>
-          {title.length}/100 characters
-        </p>
       </div>
       
-      <div className={SPACING.form.inputGap}>
-        <label htmlFor="body" className={`block ${TYPOGRAPHY.label.base} mb-2`}>
+      <div className="relative" style={{ marginTop: '24px' }}>
+        <label htmlFor="body" className="block text-body-sm font-medium text-text-primary mb-2">
           Body
         </label>
         <textarea
@@ -113,7 +116,16 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
               setErrors({ ...errors, body: undefined })
             }
           }}
-          className={`w-full rounded-md border border-gray-300 ${TOUCH_TARGETS.textarea} focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 min-h-[150px] sm:min-h-[200px]`}
+          className="w-full bg-white border border-ui-grey focus:border-ui-grey focus:outline-none focus:ring-0 font-mono resize-none"
+          style={{
+            padding: '24px 16px',
+            borderRadius: '8px',
+            height: '320px',
+            fontSize: '20px',
+            lineHeight: '1.5',
+            fontStyle: body ? 'normal' : 'italic',
+            color: body ? 'var(--text-primary)' : '#777777'
+          }}
           placeholder="What's on your mind? Remember, this post will disappear after 24 hours..."
           aria-invalid={!!errors.body}
           aria-describedby={errors.body ? 'body-error' : undefined}
@@ -121,30 +133,46 @@ export default function PostForm({ initialData, onSubmit, isEditing = false }: P
           maxLength={1000}
         />
         {errors.body && (
-          <p id="body-error" className={`mt-1 ${TYPOGRAPHY.body.small} text-red-600`}>
+          <p id="body-error" className="mt-1 text-sm text-red-600">
             {errors.body}
           </p>
         )}
-        <p className={`mt-1 ${TYPOGRAPHY.body.small} text-gray-500`}>
-          {body.length}/1000 characters
+        <p className="absolute bottom-2 right-2 text-micro text-text-primary" style={{ padding: '8px' }}>
+          {body.length}/1000
         </p>
       </div>
       
-      <div className={`${LAYOUT.responsiveRow} ${SPACING.component.gapSmall} w-full sm:w-auto`}>
+      <div className="flex gap-6" style={{ marginTop: '40px' }}>
         <button
           type="submit"
           disabled={isLoading}
-          className={`${TOUCH_TARGETS.button} ${TYPOGRAPHY.body.base} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto`}
+          className="bg-brand-blue text-white text-caption font-semibold hover:bg-blue-hover focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+          style={{
+            minWidth: '120px',
+            height: '48px',
+            borderRadius: '4px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.25px'
+          }}
         >
-          {isLoading ? 'Loading...' : isEditing ? 'Update Post' : 'Publish Post'}
+          {isLoading ? 'LOADING...' : isEditing ? 'UPDATE' : 'PUBLISH'}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
           disabled={isLoading}
-          className={`${TOUCH_TARGETS.button} ${TYPOGRAPHY.body.base} rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto`}
+          className="bg-gray-50 text-text-primary border border-ui-grey hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+          style={{
+            minWidth: '120px',
+            height: '48px',
+            borderRadius: '4px',
+            backgroundColor: '#F5F5F5',
+            color: '#333333',
+            fontWeight: 600,
+            fontSize: '16px'
+          }}
         >
-          Cancel
+          CANCEL
         </button>
       </div>
     </form>

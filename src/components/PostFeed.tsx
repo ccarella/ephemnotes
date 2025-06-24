@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
 import { PostItem } from './PostItem'
 import type { Post } from '@/lib/posts'
 import { useToast } from '@/lib/toast'
@@ -16,7 +15,6 @@ interface PostFeedProps {
 
 export function PostFeed({ posts, isLoading = false, error = null, onRetry }: PostFeedProps) {
   const { toast } = useToast()
-  const router = useRouter()
   const hasShownError = useRef(false)
 
   useEffect(() => {
@@ -89,23 +87,24 @@ export function PostFeed({ posts, isLoading = false, error = null, onRetry }: Po
   }
 
   if (!posts || posts.length === 0) {
-    return <EmptyState onCreatePost={() => router.push('/new-post')} />
+    return <EmptyState />
   }
 
+  // Show only the latest post according to style guide
+  const latestPost = posts[0]
+  
   return (
-    <div className="space-y-4 animate-fade-in">
-      {posts.map((post) => (
-        <PostItem key={post.id} post={post} href={`/posts/${post.id}`} />
-      ))}
+    <div className="animate-fade-in">
+      <PostItem key={latestPost.id} post={latestPost} href={`/posts/${latestPost.id}`} />
     </div>
   )
 }
 
-function EmptyState({ onCreatePost }: { onCreatePost: () => void }) {
+function EmptyState() {
   return (
-    <div className="p-8 border border-border rounded-xl bg-gray-50/50 dark:bg-gray-900/20 text-center animate-fade-in">
+    <div className="card text-center animate-fade-in">
       <svg
-        className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-600 mb-4"
+        className="w-12 h-12 mx-auto text-text-muted mb-4"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -117,13 +116,8 @@ function EmptyState({ onCreatePost }: { onCreatePost: () => void }) {
           d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
         />
       </svg>
-      <p className="text-foreground text-lg font-medium mb-4">Be the first to post</p>
-      <button
-        onClick={onCreatePost}
-        className="px-6 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-lg shadow-sm hover:shadow transition-all duration-150 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2"
-      >
-        Create Post
-      </button>
+      <p className="text-display-2 font-semibold text-text-primary mb-4">Be the first to post</p>
+      <p className="text-body-lg text-text-secondary">Share your ephemeral thoughts</p>
     </div>
   )
 }

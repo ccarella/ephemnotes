@@ -5,7 +5,6 @@ import PostForm from '@/components/PostForm'
 import { createPost } from '@/lib/posts'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSupabase } from '@/providers/supabase-provider'
-import { SPACING, TYPOGRAPHY } from '@/lib/responsive'
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -29,13 +28,14 @@ export default function NewPostPage() {
 
   return (
     <div className="min-h-screen">
-      <div className={`${SPACING.container.padding} ${SPACING.container.maxWidthNarrow}`}>
-        <header className={SPACING.section.paddingSmall}>
-          <h1 className={TYPOGRAPHY.heading.h1}>Create Post</h1>
-          <p className={`${TYPOGRAPHY.body.base} text-muted-foreground mt-2`}>Share your ephemeral thought</p>
+      <div className="max-w-3xl mx-auto px-6">
+        <header style={{ marginTop: '72px' }}>
+          <h1 className="text-display-1 font-serif text-text-primary" style={{ fontWeight: 500 }}>
+            Create Post
+          </h1>
         </header>
 
-        <main>
+        <main style={{ marginTop: '32px' }}>
           <PostForm onSubmit={handleSubmit} />
         </main>
       </div>
