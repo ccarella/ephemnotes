@@ -1,4 +1,23 @@
 import { NavBar } from '@/components/NavBar'
+import { PostFeed } from '@/components/PostFeed'
+import { createServerSupabaseClient } from '@/lib/supabase'
+import { getPosts } from '@/lib/posts'
+import { Suspense } from 'react'
+
+async function PostsList() {
+  let posts = []
+  let error = null
+
+  try {
+    const supabase = await createServerSupabaseClient()
+    posts = await getPosts(supabase)
+  } catch (err) {
+    console.error('Error fetching posts:', err)
+    error = err
+  }
+
+  return <PostFeed posts={posts} error={error} />
+}
 
 export default function Home() {
   return (
@@ -14,11 +33,9 @@ export default function Home() {
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
             <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <p className="text-muted-foreground">
-                  No posts yet. Sign in to create your first post!
-                </p>
-              </div>
+              <Suspense fallback={<PostFeed isLoading />}>
+                <PostsList />
+              </Suspense>
             </div>
           </div>
         </main>
