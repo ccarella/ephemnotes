@@ -15,7 +15,7 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     return (
       <div 
         data-testid="post-item-skeleton"
-        className="p-5 border border-border rounded-xl bg-gray-50/50 dark:bg-gray-900/20 animate-fade-in"
+        className="card animate-fade-in"
       >
         <div className="space-y-3">
           {/* Header section with username and title */}
@@ -37,7 +37,6 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     )
   }
 
-  const username = post?.username || 'Anonymous'
   const title = post?.title || '(Untitled)'
   const body = post?.body || ''
   const createdAt = post?.created_at ? new Date(post.created_at) : null
@@ -68,33 +67,29 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
   const content = (
     <div 
       data-testid="post-item"
-      className={`p-5 border border-border rounded-xl hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm bg-background transition-all duration-150 ${href ? 'cursor-pointer' : ''}`}
+      className={`card transition-all duration-150 ${href ? 'cursor-pointer' : ''}`}
     >
-      <div className="space-y-3">
-        {/* Header section with username and title */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
-          <span className="text-sm text-muted whitespace-nowrap">
-            {username}
-          </span>
-          <h3 
-            data-testid="post-title" 
-            className="text-base font-medium text-foreground line-clamp-1 sm:line-clamp-none sm:truncate"
-          >
-            {title}
-          </h3>
-        </div>
+      <div className="relative">
+        {/* Title */}
+        <h3 
+          data-testid="post-title" 
+          className="text-display-2 font-semibold text-text-primary mb-4"
+          style={{ fontWeight: 600 }}
+        >
+          {title}
+        </h3>
         
         {/* Body preview */}
         {body && (
-          <p className="text-sm text-muted leading-relaxed line-clamp-2 sm:line-clamp-3">
+          <p className="text-body-lg text-text-primary leading-relaxed line-clamp-3">
             {body}
           </p>
         )}
         
-        {/* Timestamp */}
+        {/* Timestamp - positioned at bottom right */}
         {createdAt && (
           <time 
-            className="text-xs text-muted/70"
+            className="absolute bottom-0 right-0 text-caption text-text-muted"
             dateTime={createdAt.toISOString()}
           >
             {formatTimestamp(createdAt)}
@@ -108,7 +103,8 @@ export function PostItem({ post, isLoading = false, href }: PostItemProps) {
     return (
       <Link 
         href={href} 
-        className="block focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 rounded-xl"
+        className="block focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+        style={{ borderRadius: '24px' }}
       >
         {content}
       </Link>

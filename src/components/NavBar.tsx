@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { AuthModal } from './AuthModal'
 import { UserMenu } from './UserMenu'
 import { SkeletonAvatar } from './Skeleton'
-import { NAVIGATION, SPACING, TOUCH_TARGETS } from '@/lib/responsive'
+import { SPACING } from '@/lib/responsive'
 
 export function NavBar() {
   const { user, loading } = useAuth()
@@ -22,18 +22,20 @@ export function NavBar() {
     <>
       <nav
         role="navigation"
-        className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-lg transition-all duration-200"
+        className="sticky top-0 z-40 w-full bg-white border-b border-border-grey"
+        style={{ height: '64px' }}
       >
-        <div className={`${SPACING.container.maxWidth} ${SPACING.container.padding}`}>
+        <div className="h-full">
           <div
             data-testid="navbar-container"
-            className={NAVIGATION.container}
+            className="h-full flex items-center justify-between px-6"
           >
             {/* Logo */}
             <div className="flex items-center">
               <Link
                 href="/"
-                className={`${NAVIGATION.logo} text-foreground hover:opacity-80 transition-opacity`}
+                className="text-brand-blue font-semibold text-lg hover:opacity-80 transition-opacity"
+                style={{ fontFamily: 'var(--font-ui-sans)', fontWeight: 600 }}
               >
                 EphemNotes
               </Link>
@@ -50,9 +52,14 @@ export function NavBar() {
               ) : (
                 <button
                   onClick={handleSignIn}
-                  className={`${TOUCH_TARGETS.button} rounded-lg bg-primary text-sm font-medium text-white hover:bg-primary-hover shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
+                  className="bg-brand-blue text-white text-sm font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+                  style={{ 
+                    padding: '8px 18px',
+                    borderRadius: '12px',
+                    lineHeight: '18px'
+                  }}
                 >
-                  Sign In
+                  New Post
                 </button>
               )}
             </div>
@@ -60,7 +67,7 @@ export function NavBar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`${NAVIGATION.mobileMenu.button} rounded-lg text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
+              className="md:hidden p-2 rounded-lg text-text-primary hover:bg-gray-100 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -91,7 +98,7 @@ export function NavBar() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className={`${NAVIGATION.mobileMenu.menu} bg-background border-t border-border animate-fade-in`}>
+            <div className="absolute left-0 right-0 top-16 bg-white border-t border-border-grey animate-fade-in md:hidden">
               <div className={`${SPACING.component.padding} ${SPACING.component.gap} flex flex-col`}>
                 {loading ? (
                   <div className="flex justify-center py-4">
@@ -104,9 +111,14 @@ export function NavBar() {
                 ) : (
                   <button
                     onClick={handleSignIn}
-                    className={`${TOUCH_TARGETS.button} w-full rounded-lg bg-primary text-sm font-medium text-white hover:bg-primary-hover shadow-sm hover:shadow transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2`}
+                    className="w-full bg-brand-blue text-white text-sm font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+                    style={{ 
+                      padding: '8px 18px',
+                      borderRadius: '12px',
+                      lineHeight: '18px'
+                    }}
                   >
-                    Sign In
+                    New Post
                   </button>
                 )}
               </div>

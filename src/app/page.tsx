@@ -21,27 +21,41 @@ async function PostsList() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <NavBar />
-      <div className="px-4 sm:px-6 lg:px-8">
-        <header className="mx-auto max-w-3xl py-12 sm:py-16 lg:py-20 text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
-            EphemNotes
+      <div>
+        <header className="text-center" style={{ marginTop: '80px' }}>
+          <h1 
+            className="text-display-1 font-serif text-text-primary"
+            style={{ fontWeight: 500 }}
+          >
+            Latest Post
           </h1>
-          <p className="text-lg text-muted mt-4 leading-relaxed">
-            Share your ephemeral thoughts
+          <p 
+            className="font-serif text-text-secondary"
+            style={{ fontSize: '24px', fontWeight: 400, marginTop: '8px' }}
+          >
+            A thought worth sharing, briefly expressed
           </p>
         </header>
 
-        <main className="mx-auto max-w-3xl pb-12 sm:pb-16 lg:pb-20">
-          <div className="space-y-8">
-            <h2 className="text-xl sm:text-2xl font-medium text-foreground">
-              Recent Posts
-            </h2>
-            <Suspense fallback={<PostFeed isLoading />}>
-              <PostsList />
-            </Suspense>
-          </div>
+        <main className="flex flex-col items-center" style={{ marginTop: '40px', paddingBottom: '80px' }}>
+          <Suspense fallback={<PostFeed isLoading />}>
+            <PostsList />
+          </Suspense>
+          
+          <button 
+            onClick={() => window.location.href = '/new-post'}
+            className="bg-brand-blue text-white text-caption font-semibold hover:bg-blue-hover transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:ring-offset-2"
+            style={{ 
+              width: '240px',
+              height: '48px',
+              borderRadius: '4px',
+              marginTop: '40px'
+            }}
+          >
+            CREATE POST
+          </button>
         </main>
       </div>
     </div>
