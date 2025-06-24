@@ -7,6 +7,13 @@ import {
   isSupabaseNotFoundError 
 } from '@/lib/api-utils'
 
+interface PostRequestBody {
+  id?: string
+  title: string
+  body?: string | null
+  published?: boolean
+}
+
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient()
 
@@ -22,7 +29,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Parse the request body
-  const body = await parseRequestBody(request)
+  const body = await parseRequestBody<PostRequestBody>(request)
   if (!body) {
     return createErrorResponse('Invalid request body', 400)
   }
@@ -62,6 +69,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Create new post
+  const username = user.user_metadata?.username || user.email?.split('@')[0] || 'Anonymous'
   const { data: post, error } = await supabase
     .from('posts')
     .insert({
@@ -69,6 +77,7 @@ export async function POST(request: NextRequest) {
       body: body.body,
       published: body.published,
       user_id: user.id,
+      username: username,
     })
     .select()
     .single()
