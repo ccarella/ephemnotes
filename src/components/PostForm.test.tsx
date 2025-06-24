@@ -7,8 +7,17 @@ const mockRouter = {
   back: vi.fn(),
 }
 
+const mockToast = {
+  success: vi.fn(),
+  error: vi.fn(),
+}
+
 vi.mock('next/navigation', () => ({
   useRouter: () => mockRouter,
+}))
+
+vi.mock('@/lib/toast', () => ({
+  useToast: () => ({ toast: mockToast }),
 }))
 
 describe('PostForm', () => {
@@ -96,7 +105,7 @@ describe('PostForm', () => {
     expect(screen.getByText('9/1000 characters')).toBeInTheDocument()
   })
 
-  it('submits form with valid data', async () => {
+  it('submits form with valid data and shows success toast', async () => {
     const user = userEvent.setup()
     const mockSubmit = vi.fn()
     render(<PostForm onSubmit={mockSubmit} />)
@@ -108,6 +117,30 @@ describe('PostForm', () => {
     expect(mockSubmit).toHaveBeenCalledWith({
       title: 'Test Title',
       body: 'Test Body Content',
+    })
+    
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith('Post created successfully!')
+    })
+  })
+
+  it('resets form after successful creation', async () => {
+    const user = userEvent.setup()
+    const mockSubmit = vi.fn()
+    render(<PostForm onSubmit={mockSubmit} />)
+    
+    const titleInput = screen.getByLabelText('Title')
+    const bodyInput = screen.getByLabelText('Body')
+    
+    await user.type(titleInput, 'Test Title')
+    await user.type(bodyInput, 'Test Body Content')
+    await user.click(screen.getByRole('button', { name: 'Publish Post' }))
+    
+    await waitFor(() => {
+      expect(titleInput).toHaveValue('')
+      expect(bodyInput).toHaveValue('')
+      expect(screen.getByText('0/100 characters')).toBeInTheDocument()
+      expect(screen.getByText('0/1000 characters')).toBeInTheDocument()
     })
   })
 
@@ -140,7 +173,21 @@ describe('PostForm', () => {
     expect(screen.getByLabelText('Body')).toBeDisabled()
   })
 
-  it('displays submission error', async () => {
+  it('shows update success toast when editing', async () => {
+    const user = userEvent.setup()
+    const mockSubmit = vi.fn()
+    render(<PostForm onSubmit={mockSubmit} isEditing />)
+    
+    await user.type(screen.getByLabelText('Title'), 'Updated Title')
+    await user.type(screen.getByLabelText('Body'), 'Updated Body')
+    await user.click(screen.getByRole('button', { name: 'Update Post' }))
+    
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith('Post updated successfully!')
+    })
+  })
+
+  it('shows error toast on submission failure', async () => {
     const user = userEvent.setup()
     const mockSubmit = vi.fn().mockRejectedValue(new Error('Submission failed'))
     render(<PostForm onSubmit={mockSubmit} />)
@@ -150,7 +197,7 @@ describe('PostForm', () => {
     await user.click(screen.getByRole('button', { name: 'Publish Post' }))
     
     await waitFor(() => {
-      expect(screen.getByText('Submission failed')).toBeInTheDocument()
+      expect(mockToast.error).toHaveBeenCalledWith('Submission failed')
     })
   })
 

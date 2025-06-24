@@ -3,16 +3,31 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AuthModal } from './AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/lib/toast'
 
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: vi.fn(),
 }))
 
+vi.mock('@/lib/toast', () => ({
+  useToast: vi.fn(),
+}))
+
 const mockUseAuth = vi.mocked(useAuth)
+const mockUseToast = vi.mocked(useToast)
 
 describe('AuthModal', () => {
   const mockSignIn = vi.fn()
   const mockSignUp = vi.fn()
+  const mockToast = {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+    custom: vi.fn(),
+    dismiss: vi.fn(),
+    dismissAll: vi.fn(),
+  }
   const onClose = vi.fn()
 
   beforeEach(() => {
@@ -25,6 +40,10 @@ describe('AuthModal', () => {
       signIn: mockSignIn,
       signUp: mockSignUp,
       signOut: vi.fn(),
+    })
+    mockUseToast.mockReturnValue({
+      toasts: [],
+      toast: mockToast,
     })
   })
 
@@ -41,8 +60,8 @@ describe('AuthModal', () => {
     const user = userEvent.setup()
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
-    const switchLink = screen.getByText(/don't have an account/i)
-    await user.click(switchLink)
+    const switchButton = screen.getByRole('button', { name: /sign up/i })
+    await user.click(switchButton)
     
     expect(screen.getByRole('heading', { name: 'Sign Up' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /sign up/i })).toBeInTheDocument()
@@ -68,7 +87,8 @@ describe('AuthModal', () => {
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
     // Switch to sign up mode
-    await user.click(screen.getByText(/don't have an account/i))
+    const switchButton = screen.getByRole('button', { name: /sign up/i })
+    await user.click(switchButton)
     
     const emailInput = screen.getByLabelText('Email')
     const passwordInput = screen.getByLabelText('Password')
@@ -81,21 +101,24 @@ describe('AuthModal', () => {
     expect(mockSignUp).toHaveBeenCalledWith('newuser@example.com', 'newpassword123')
   })
 
-  it('displays error message when auth fails', () => {
+  it('displays error toast when auth fails', async () => {
+    const user = userEvent.setup()
     const error = new Error('Invalid credentials')
-    mockUseAuth.mockReturnValue({
-      user: null,
-      session: null,
-      loading: false,
-      error: error as Error,
-      signIn: mockSignIn,
-      signUp: mockSignUp,
-      signOut: vi.fn(),
-    })
+    mockSignIn.mockRejectedValueOnce(error)
     
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
-    expect(screen.getByText('Invalid credentials')).toBeInTheDocument()
+    const emailInput = screen.getByLabelText('Email')
+    const passwordInput = screen.getByLabelText('Password')
+    const submitButton = screen.getByRole('button', { name: /sign in/i })
+    
+    await user.type(emailInput, 'test@example.com')
+    await user.type(passwordInput, 'password123')
+    await user.click(submitButton)
+    
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith('Invalid credentials')
+    })
   })
 
   it('disables form and shows loading state during authentication', () => {
@@ -111,7 +134,7 @@ describe('AuthModal', () => {
     
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
-    const submitButton = screen.getByRole('button', { name: /sign in/i })
+    const submitButton = screen.getByRole('button', { name: /loading/i })
     const emailInput = screen.getByLabelText('Email')
     const passwordInput = screen.getByLabelText('Password')
     
@@ -131,7 +154,7 @@ describe('AuthModal', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
-  it('closes modal on successful authentication', async () => {
+  it('closes modal and shows success toast on successful sign in', async () => {
     const user = userEvent.setup()
     mockSignIn.mockResolvedValueOnce(undefined)
     
@@ -146,6 +169,31 @@ describe('AuthModal', () => {
     await user.click(submitButton)
     
     await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith('Welcome back!')
+      expect(onClose).toHaveBeenCalled()
+    })
+  })
+
+  it('closes modal and shows success toast on successful sign up', async () => {
+    const user = userEvent.setup()
+    mockSignUp.mockResolvedValueOnce(undefined)
+    
+    render(<AuthModal isOpen={true} onClose={onClose} />)
+    
+    // Switch to sign up mode
+    const switchButton = screen.getByRole('button', { name: /sign up/i })
+    await user.click(switchButton)
+    
+    const emailInput = screen.getByLabelText('Email')
+    const passwordInput = screen.getByLabelText('Password')
+    const submitButton = screen.getByRole('button', { name: /sign up/i })
+    
+    await user.type(emailInput, 'newuser@example.com')
+    await user.type(passwordInput, 'newpassword123')
+    await user.click(submitButton)
+    
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith('Account created successfully!')
       expect(onClose).toHaveBeenCalled()
     })
   })
@@ -155,35 +203,43 @@ describe('AuthModal', () => {
     expect(container.firstChild).toBeNull()
   })
 
-  it('validates email format', async () => {
+  it('validates email format and shows inline error', async () => {
     const user = userEvent.setup()
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
     const emailInput = screen.getByLabelText('Email')
     const passwordInput = screen.getByLabelText('Password')
-    const submitButton = screen.getByRole('button', { name: /sign in/i })
+    const submitButton = screen.getByRole('button', { name: 'Sign In' })
     
     await user.type(emailInput, 'invalid-email')
     await user.type(passwordInput, 'password123')
     await user.click(submitButton)
     
+    await waitFor(() => {
+      expect(screen.getByText('Please enter a valid email')).toBeInTheDocument()
+    })
+    
     expect(mockSignIn).not.toHaveBeenCalled()
-    expect(screen.getByText('Please enter a valid email')).toBeInTheDocument()
+    expect(mockToast.error).not.toHaveBeenCalled()
   })
 
-  it('validates password length', async () => {
+  it('validates password length and shows inline error', async () => {
     const user = userEvent.setup()
     render(<AuthModal isOpen={true} onClose={onClose} />)
     
     const emailInput = screen.getByLabelText('Email')
     const passwordInput = screen.getByLabelText('Password')
-    const submitButton = screen.getByRole('button', { name: /sign in/i })
+    const submitButton = screen.getByRole('button', { name: 'Sign In' })
     
     await user.type(emailInput, 'test@example.com')
     await user.type(passwordInput, '123')
     await user.click(submitButton)
     
+    await waitFor(() => {
+      expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument()
+    })
+    
     expect(mockSignIn).not.toHaveBeenCalled()
-    expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument()
+    expect(mockToast.error).not.toHaveBeenCalled()
   })
 })

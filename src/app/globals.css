@@ -236,3 +236,17 @@ h6 {
 .isolate {
   isolation: isolate;
 }
+
+/* Toast progress animation */
+@keyframes shrink {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.animate-shrink {
+  animation: shrink linear forwards;
+}

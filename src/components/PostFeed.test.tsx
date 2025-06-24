@@ -1,7 +1,20 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { PostFeed } from './PostFeed'
 import type { Post } from '@/lib/posts'
+
+// Mock the toast hook
+vi.mock('@/lib/toast', () => ({
+  useToast: () => ({
+    toast: {
+      error: vi.fn(),
+      success: vi.fn(),
+      info: vi.fn(),
+      warning: vi.fn(),
+    }
+  })
+}))
 
 describe('PostFeed', () => {
   const mockPosts: Post[] = [
@@ -35,11 +48,40 @@ describe('PostFeed', () => {
   })
 
   it('displays error state when error is provided', () => {
-    const error = new Error('Failed to fetch posts')
+    const error = new Error('Something went wrong')
     render(<PostFeed error={error} />)
     
-    expect(screen.getByText('Error loading posts')).toBeInTheDocument()
-    expect(screen.getByText('Please try refreshing the page.')).toBeInTheDocument()
+    expect(screen.getByText('Unable to Load Posts')).toBeInTheDocument()
+    expect(screen.getByText('Something went wrong while loading posts. Please try again.')).toBeInTheDocument()
+  })
+
+  it('displays network error state when network error is provided', () => {
+    const error = new Error('Network failed')
+    render(<PostFeed error={error} />)
+    
+    expect(screen.getByText('Connection Error')).toBeInTheDocument()
+    expect(screen.getByText('Check your internet connection and try again.')).toBeInTheDocument()
+  })
+
+  it('shows retry button when onRetry is provided', async () => {
+    const error = new Error('Something went wrong')
+    const onRetry = vi.fn()
+    const user = userEvent.setup()
+    
+    render(<PostFeed error={error} onRetry={onRetry} />)
+    
+    const retryButton = screen.getByRole('button', { name: 'Try Again' })
+    expect(retryButton).toBeInTheDocument()
+    
+    await user.click(retryButton)
+    expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not show retry button when onRetry is not provided', () => {
+    const error = new Error('Something went wrong')
+    render(<PostFeed error={error} />)
+    
+    expect(screen.queryByRole('button', { name: 'Try Again' })).not.toBeInTheDocument()
   })
 
   it('displays empty state when posts array is empty', () => {

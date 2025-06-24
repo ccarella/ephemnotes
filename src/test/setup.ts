@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
@@ -20,6 +21,23 @@ vi.mock('next/navigation', () => ({
   },
 }))
 
+// Mock toast context
+vi.mock('@/lib/toast', () => ({
+  useToast: () => ({
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+      info: vi.fn(),
+      warning: vi.fn(),
+      custom: vi.fn(),
+      dismiss: vi.fn(),
+      dismissAll: vi.fn(),
+    },
+    toasts: [],
+  }),
+  ToastProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -34,3 +52,11 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 })
+
+// Mock requestAnimationFrame
+global.requestAnimationFrame = vi.fn((cb) => {
+  setTimeout(() => cb(Date.now()), 0)
+  return 1
+})
+
+global.cancelAnimationFrame = vi.fn()
