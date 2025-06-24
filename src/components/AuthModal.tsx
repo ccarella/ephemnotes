@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useFarcasterAuth } from '@/contexts/FarcasterAuthContext'
 import { useToast } from '@/lib/toast'
 import { MODAL, TOUCH_TARGETS, SPACING, TYPOGRAPHY } from '@/lib/responsive'
 import { SignUpForm } from './SignUpForm'
@@ -21,6 +22,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [validationError, setValidationError] = useState<string | null>(null)
   const [magicLinkSent, setMagicLinkSent] = useState(false)
   const { signIn, signInWithMagicLink, loading } = useAuth()
+  const { quickAuth, signInWithFarcaster, isInFarcasterFrame, loading: farcasterLoading } = useFarcasterAuth()
   const { toast } = useToast()
   const router = useRouter()
 
@@ -219,6 +221,78 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </form>
         ) : (
           <SignUpForm onSuccess={handleSignUpSuccess} />
+        )}
+
+        {/* Farcaster Authentication */}
+        {!magicLinkSent && mode === 'signin' && (
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              {isInFarcasterFrame ? (
+                <button
+                  onClick={async () => {
+                    try {
+                      await quickAuth()
+                      toast.success('Welcome back!')
+                      onClose()
+                    } catch (error) {
+                      const errorMessage = error instanceof Error ? error.message : 'Authentication failed'
+                      toast.error(errorMessage)
+                    }
+                  }}
+                  disabled={farcasterLoading}
+                  className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} flex items-center justify-center`}
+                >
+                  {farcasterLoading ? (
+                    'Authenticating...'
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.24 7.17L12 0.93 5.76 7.17c-1.42 1.42-1.42 3.73 0 5.15l4.59 4.59c0.92 0.92 2.38 0.92 3.3 0l4.59-4.59c1.42-1.42 1.42-3.73 0-5.15zm-6.24 9.66L7.41 12.24c-0.78-0.78-0.78-2.05 0-2.83L12 4.83l4.59 4.58c0.78 0.78 0.78 2.05 0 2.83L12 16.83z"/>
+                      </svg>
+                      Quick Auth with Farcaster
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={async () => {
+                    try {
+                      await signInWithFarcaster()
+                      toast.success('Welcome back!')
+                      onClose()
+                    } catch (error) {
+                      const errorMessage = error instanceof Error ? error.message : 'Authentication failed'
+                      toast.error(errorMessage)
+                    }
+                  }}
+                  disabled={farcasterLoading}
+                  className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-purple-500 dark:hover:bg-purple-600 ${TYPOGRAPHY.body.base} flex items-center justify-center`}
+                >
+                  {farcasterLoading ? (
+                    'Authenticating...'
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.24 7.17L12 0.93 5.76 7.17c-1.42 1.42-1.42 3.73 0 5.15l4.59 4.59c0.92 0.92 2.38 0.92 3.3 0l4.59-4.59c1.42-1.42 1.42-3.73 0-5.15zm-6.24 9.66L7.41 12.24c-0.78-0.78-0.78-2.05 0-2.83L12 4.83l4.59 4.58c0.78 0.78 0.78 2.05 0 2.83L12 16.83z"/>
+                      </svg>
+                      Sign in with Farcaster
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
         )}
 
         {!magicLinkSent && (

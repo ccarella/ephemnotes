@@ -13,10 +13,13 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@farcaster/auth-client": "^0.7.0",
     "@farcaster/frame-sdk": "^0.0.64",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "clsx": "^2.1.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
