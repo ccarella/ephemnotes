@@ -6,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext'
 import { AuthModal } from './AuthModal'
 import { UserMenu } from './UserMenu'
 import { SkeletonAvatar } from './Skeleton'
-import { SPACING } from '@/lib/responsive'
 
 export function NavBar() {
   const { user, loading } = useAuth()
@@ -42,7 +41,7 @@ export function NavBar() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className={NAVIGATION.desktopMenu}>
+            <div className="hidden md:block">
               {loading ? (
                 <div data-testid="navbar-loading">
                   <SkeletonAvatar size="sm" />
@@ -99,7 +98,7 @@ export function NavBar() {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="absolute left-0 right-0 top-16 bg-white border-t border-border-grey animate-fade-in md:hidden">
-              <div className={`${SPACING.component.padding} ${SPACING.component.gap} flex flex-col`}>
+              <div className="p-4 space-y-4 flex flex-col">
                 {loading ? (
                   <div className="flex justify-center py-4">
                     <SkeletonAvatar size="sm" />
