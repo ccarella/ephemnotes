@@ -13,6 +13,14 @@ vi.mock('@/lib/toast', () => ({
   useToast: vi.fn(),
 }))
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}))
+
 const mockUseAuth = vi.mocked(useAuth)
 const mockUseToast = vi.mocked(useToast)
 
@@ -193,7 +201,7 @@ describe('AuthModal', () => {
     await user.click(submitButton)
     
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalledWith('Account created successfully!')
+      expect(mockToast.success).toHaveBeenCalledWith('Account created! Please check your email to verify your account.')
       expect(onClose).toHaveBeenCalled()
     })
   })

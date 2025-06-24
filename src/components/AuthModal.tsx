@@ -4,6 +4,8 @@ import { useState, useEffect, FormEvent } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/lib/toast'
 import { MODAL, TOUCH_TARGETS, SPACING, TYPOGRAPHY } from '@/lib/responsive'
+import { SignUpForm } from './SignUpForm'
+import { useRouter } from 'next/navigation'
 
 type AuthModalProps = {
   isOpen: boolean
@@ -15,8 +17,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validationError, setValidationError] = useState<string | null>(null)
-  const { signIn, signUp, loading } = useAuth()
+  const { signIn, loading } = useAuth()
   const { toast } = useToast()
+  const router = useRouter()
 
   useEffect(() => {
     if (!isOpen) {
@@ -55,19 +58,19 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
 
     try {
-      if (mode === 'signin') {
-        await signIn(email, password)
-        toast.success('Welcome back!')
-      } else {
-        await signUp(email, password)
-        toast.success('Account created successfully!')
-      }
+      await signIn(email, password)
+      toast.success('Welcome back!')
       onClose()
     } catch (error) {
       // Display error message from Supabase
       const errorMessage = error instanceof Error ? error.message : 'An error occurred during authentication'
       toast.error(errorMessage)
     }
+  }
+
+  const handleSignUpSuccess = () => {
+    onClose()
+    router.push(`/email-validation?email=${encodeURIComponent(email)}`)
   }
 
   if (!isOpen) return null
@@ -110,8 +113,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={SPACING.form.gap}>
-          <div className={SPACING.form.inputGap}>
+        {mode === 'signin' ? (
+          <form onSubmit={handleSubmit} className={SPACING.form.gap}>
+            <div className={SPACING.form.inputGap}>
             <label htmlFor="email" className={`block ${TYPOGRAPHY.label.base}`}>
               Email
             </label>
@@ -147,14 +151,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600 ${TYPOGRAPHY.body.base}`}
-          >
-            {loading ? 'Loading...' : mode === 'signin' ? 'Sign In' : 'Sign Up'}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full ${TOUCH_TARGETS.button} rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600 ${TYPOGRAPHY.body.base}`}
+            >
+              {loading ? 'Loading...' : 'Sign In'}
+            </button>
+          </form>
+        ) : (
+          <SignUpForm onSuccess={handleSignUpSuccess} />
+        )}
 
         <div className={`mt-6 text-center ${TYPOGRAPHY.body.base}`}>
           {mode === 'signin' ? (
