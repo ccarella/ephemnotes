@@ -113,3 +113,9 @@ npm run test:e2e:ui
 - Run `npm test` for unit/integration tests in watch mode
 - Run `npm run test:e2e` for E2E tests
 - Use the UI versions (`test:ui`, `test:e2e:ui`) for interactive debugging
+
+## MCP Servers
+
+This project has 2 MCP (Model Context Protocol) servers configured:
+- **Supabase MCP Server**: Provides tools for managing Supabase database, migrations, edge functions, and more
+- **Playwright MCP Server**: Provides browser automation tools for web interaction and testing

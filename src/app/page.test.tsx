@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/test-utils'
 import Home from './page'
 
 describe('Home Page', () => {
   it('renders the home page with title', () => {
     render(<Home />)
 
-    expect(screen.getByText('EphemNotes')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'EphemNotes' })).toBeInTheDocument()
     expect(screen.getByText('Share your ephemeral thoughts')).toBeInTheDocument()
   })
 
