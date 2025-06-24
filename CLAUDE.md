@@ -95,17 +95,20 @@ npm run test:e2e:ui
 ## Testing Guidelines
 
 ### Unit/Integration Tests
+
 - Place component tests next to the component files (e.g., `Button.test.tsx` next to `Button.tsx`)
 - Use Vitest for unit and integration testing
 - Tests run in jsdom environment with React Testing Library
 - Global test utilities available via `src/test/setup.ts`
 
 ### E2E Tests
+
 - Place E2E tests in the `tests/` directory
 - Playwright runs tests against the development server (http://localhost:3000)
 - Tests run in Chromium, Firefox, and WebKit by default
 
 ### Running Tests
+
 - Before running tests, ensure the development server is not running (for E2E tests)
 - Run `npm test` for unit/integration tests in watch mode
 - Run `npm run test:e2e` for E2E tests
