@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { toast } from '@/lib/toast'
+import { useToast } from '@/lib/toast'
 
 interface SignInFormProps {
   className?: string
@@ -18,6 +18,7 @@ export function SignInForm({
   onSuccess,
 }: SignInFormProps) {
   const { signInWithMagicLink } = useAuth()
+  const { toast } = useToast()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<{ email?: string }>({})
